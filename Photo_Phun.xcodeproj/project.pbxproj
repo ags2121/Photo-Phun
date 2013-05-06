@@ -18,6 +18,7 @@
 		A9C3734917373488006CFFBE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9C3734817373488006CFFBE /* Default-568h@2x.png */; };
 		A9C3734C17373488006CFFBE /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9C3734A17373488006CFFBE /* MainStoryboard.storyboard */; };
 		A9C3734F17373488006CFFBE /* PPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C3734E17373488006CFFBE /* PPViewController.m */; };
+		A9C373631737483B006CFFBE /* PPDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C373621737483B006CFFBE /* PPDataFetcher.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,12 @@
 		A9C3734B17373488006CFFBE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		A9C3734D17373488006CFFBE /* PPViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PPViewController.h; sourceTree = "<group>"; };
 		A9C3734E17373488006CFFBE /* PPViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PPViewController.m; sourceTree = "<group>"; };
+		A9C3735F17374813006CFFBE /* GTMHTTPFetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GTMHTTPFetcher.h; sourceTree = "<group>"; };
+		A9C3736017374813006CFFBE /* GTMHTTPFetcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GTMHTTPFetcher.m; sourceTree = "<group>"; };
+		A9C373611737483B006CFFBE /* PPDataFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPDataFetcher.h; path = Model/PPDataFetcher.h; sourceTree = "<group>"; };
+		A9C373621737483B006CFFBE /* PPDataFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPDataFetcher.m; path = Model/PPDataFetcher.m; sourceTree = "<group>"; };
+		A9C37366173759CD006CFFBE /* FlickrPhoto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlickrPhoto.h; sourceTree = "<group>"; };
+		A9C37367173759CD006CFFBE /* FlickrPhoto.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlickrPhoto.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +95,7 @@
 				A9C3734A17373488006CFFBE /* MainStoryboard.storyboard */,
 				A9C3734D17373488006CFFBE /* PPViewController.h */,
 				A9C3734E17373488006CFFBE /* PPViewController.m */,
+				A9C373651737484A006CFFBE /* Model */,
 				A9C3733917373488006CFFBE /* Supporting Files */,
 			);
 			path = Photo_Phun;
@@ -96,6 +104,8 @@
 		A9C3733917373488006CFFBE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A9C3735F17374813006CFFBE /* GTMHTTPFetcher.h */,
+				A9C3736017374813006CFFBE /* GTMHTTPFetcher.m */,
 				A9C3733A17373488006CFFBE /* Photo_Phun-Info.plist */,
 				A9C3733B17373488006CFFBE /* InfoPlist.strings */,
 				A9C3733E17373488006CFFBE /* main.m */,
@@ -105,6 +115,17 @@
 				A9C3734817373488006CFFBE /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A9C373651737484A006CFFBE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A9C37366173759CD006CFFBE /* FlickrPhoto.h */,
+				A9C37367173759CD006CFFBE /* FlickrPhoto.m */,
+				A9C373611737483B006CFFBE /* PPDataFetcher.h */,
+				A9C373621737483B006CFFBE /* PPDataFetcher.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,6 +198,7 @@
 				A9C3733F17373488006CFFBE /* main.m in Sources */,
 				A9C3734317373488006CFFBE /* PPAppDelegate.m in Sources */,
 				A9C3734F17373488006CFFBE /* PPViewController.m in Sources */,
+				A9C373631737483B006CFFBE /* PPDataFetcher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
