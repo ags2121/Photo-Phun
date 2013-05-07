@@ -7,12 +7,35 @@
 //
 
 #import "PPAppDelegate.h"
+#import "PPFlickrSearchViewController.h"
 
 @implementation PPAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    _smc = [[PPSideMenuController alloc] initWithMenuWidth:130 numberOfFolds:3];
+    [_smc setDelegate:self];
+    [self.window setRootViewController:_smc];
+    
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"MainStoryboard"
+                                                             bundle: nil];
+    
+    PPFlickrSearchViewController *flickrSearchVC = (PPFlickrSearchViewController*)[mainStoryboard
+                                                                         instantiateViewControllerWithIdentifier: @"PPFlickrSearchViewController"];
+    [flickrSearchVC setTitle:@"Get Photos"];
+    UINavigationController *rootNavController = [[UINavigationController alloc] initWithRootViewController:flickrSearchVC];
+    
+    NSMutableArray *viewControllers = [@[rootNavController] mutableCopy];
+    
+    [_smc setViewControllers:viewControllers];
+    
+    [self setAppearanceProxies];
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 							
@@ -41,6 +64,19 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+-(void)setAppearanceProxies
+{
+    UIImage *navBackgroundImage = [UIImage imageNamed:@"nice_nav_bar_image"];
+    [[UINavigationBar appearance] setBackgroundImage:navBackgroundImage forBarMetrics:UIBarMetricsDefault];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
+                                                           [UIColor colorWithRed:222.0/255.0 green:204.0/255.0 blue:155.0/255.0 alpha:1.0], UITextAttributeTextColor,
+                                                           [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8],UITextAttributeTextShadowColor,
+                                                           [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
+                                                           UITextAttributeTextShadowOffset, nil]];
+
 }
 
 @end

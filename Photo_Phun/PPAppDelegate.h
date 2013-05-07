@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PPSideMenuController.h"
 
-@interface PPAppDelegate : UIResponder <UIApplicationDelegate>
+@interface PPAppDelegate : UIResponder <UIApplicationDelegate, PaperFoldMenuControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, strong) PPSideMenuController *smc;
 
 @end
