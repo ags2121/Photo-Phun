@@ -140,45 +140,55 @@ int const kDaysSinceCacheUpdate = 3;
         
         NSMutableArray *flickrPhotos = [@[] mutableCopy];
         
-        
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        
-        dispatch_async(queue, ^{
-        
-            for(NSMutableDictionary *objPhoto in objPhotos)
-            {
-                //TODO: add more properties to the FlickrPhoto object?
-                FlickrPhoto *photo = [[FlickrPhoto alloc] init];
-                photo.farm = [objPhoto[@"farm"] intValue];
-                photo.server = [objPhoto[@"server"] intValue];
-                photo.secret = objPhoto[@"secret"];
-                photo.photoID = [objPhoto[@"id"] longLongValue];
+        [PPDataFetcher downloadPhotos:objPhotos to:flickrPhotos completionBlock:^(NSArray *photos, NSError *error) {
+     
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
-                NSString *searchURL = [PPDataFetcher flickrPhotoURLForFlickrPhoto:photo size:@"m"];
-                NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:searchURL]
-                                                          options:0
-                                                            error:nil];
-                UIImage *image = [UIImage imageWithData:imageData];
-                photo.thumbnail = image;
+                NSDictionary *flickerPhotosAndCacheDate = @{ kCachedDate: [NSDate date], kResultsKey: flickrPhotos};
                 
-                [flickrPhotos addObject:photo];
-            }
-            
-            NSDictionary *flickerPhotosAndCacheDate = @{ kCachedDate: [NSDate date], kResultsKey: flickrPhotos};
-                                            
-            
-            [self.resultsCache setObject:flickerPhotosAndCacheDate forKey:self.currentSearchTerm];
-            
-            NSLog(@"retrieving cached date after setting it %@", [self.resultsCache objectForKey:self.currentSearchTerm][kCachedDate]);
-            
-            //NSLog(@"query Cache: %@", [self.resultsCache objectForKey:self.currentSearchTerm]);
-            
-            //send message to reload search VC
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"DidLoadNewData"
-                                                                object:nil];
-        });
-        
+                [self.resultsCache setObject:flickerPhotosAndCacheDate forKey:self.currentSearchTerm];
+                
+                NSLog(@"retrieving cached date after setting it %@", [self.resultsCache objectForKey:self.currentSearchTerm][kCachedDate]);
+                
+                //send message to reload search VC
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"DidLoadNewData"
+                                                                    object:nil];
+            }); 
+        }];
     }
+}
+
+
++ (void)downloadPhotos:(NSArray*)objPhotos to:(NSMutableArray*)flickrPhotos completionBlock:(FlickrPhotosDownloadCompletionBlock) completionBlock
+{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    dispatch_async(queue, ^{
+        
+        NSError *error = nil;
+
+        for(NSMutableDictionary *objPhoto in objPhotos)
+        {
+            //TODO: add more properties to the FlickrPhoto object?
+            FlickrPhoto *photo = [[FlickrPhoto alloc] init];
+            photo.farm = [objPhoto[@"farm"] intValue];
+            photo.server = [objPhoto[@"server"] intValue];
+            photo.secret = objPhoto[@"secret"];
+            photo.photoID = [objPhoto[@"id"] longLongValue];
+            
+            NSString *searchURL = [PPDataFetcher flickrPhotoURLForFlickrPhoto:photo size:@"m"];
+            NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:searchURL]
+                                                      options:0
+                                                        error:nil];
+            UIImage *image = [UIImage imageWithData:imageData];
+            photo.thumbnail = image;
+            
+            [flickrPhotos addObject:photo];
+        }
+        
+        completionBlock(flickrPhotos,nil);
+        
+    });
     
 }
 
@@ -212,6 +222,41 @@ int const kDaysSinceCacheUpdate = 3;
     }
     
     return NO;
+}
+
++ (void)loadImageForPhoto:(FlickrPhoto *)flickrPhoto thumbnail:(BOOL)thumbnail completionBlock:(FlickrPhotoCompletionBlock) completionBlock
+{
+    
+    NSString *size = thumbnail ? @"m" : @"b";
+    
+    NSString *searchURL = [PPDataFetcher flickrPhotoURLForFlickrPhoto:flickrPhoto size:size];
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        NSError *error = nil;
+        
+        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:searchURL]
+                                                  options:0
+                                                    error:&error];
+        if(error)
+        {
+            completionBlock(nil,error);
+        }
+        else
+        {
+            UIImage *image = [UIImage imageWithData:imageData];
+            if([size isEqualToString:@"m"])
+            {
+                flickrPhoto.thumbnail = image;
+            }
+            else
+            {
+                flickrPhoto.largeImage = image;
+            }
+            completionBlock(image,nil);
+        }
+        
+    });
 }
 
 

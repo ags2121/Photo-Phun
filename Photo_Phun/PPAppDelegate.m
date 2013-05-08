@@ -8,6 +8,8 @@
 
 #import "PPAppDelegate.h"
 #import "PPFlickrSearchViewController.h"
+#import "PPAlterImageViewController.h"
+#import "PPShowPhotosViewController.h"
 
 @implementation PPAppDelegate
 
@@ -15,19 +17,26 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    _smc = [[PPSideMenuController alloc] initWithMenuWidth:130 numberOfFolds:3];
+    _smc = [[PPSideMenuController alloc] initWithMenuWidth:150 numberOfFolds:3];
     [_smc setDelegate:self];
     [self.window setRootViewController:_smc];
     
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"MainStoryboard"
                                                              bundle: nil];
+    //create showPhotosVC
+    PPShowPhotosViewController *showPhotosVC =  (PPShowPhotosViewController*)[mainStoryboard
+                                                                              instantiateViewControllerWithIdentifier: @"PPShowPhotosViewController"];
+    [showPhotosVC setTitle:@"Show Photos"];
+     UINavigationController *showPhotosNavController = [[UINavigationController alloc] initWithRootViewController:showPhotosVC];
     
+    //create getPhotosVC
     PPFlickrSearchViewController *flickrSearchVC = (PPFlickrSearchViewController*)[mainStoryboard
                                                                          instantiateViewControllerWithIdentifier: @"PPFlickrSearchViewController"];
     [flickrSearchVC setTitle:@"Get Photos"];
-    UINavigationController *rootNavController = [[UINavigationController alloc] initWithRootViewController:flickrSearchVC];
+    UINavigationController *flickerSearchNavController = [[UINavigationController alloc] initWithRootViewController:flickrSearchVC];
     
-    NSMutableArray *viewControllers = [@[rootNavController] mutableCopy];
+    
+    NSMutableArray *viewControllers = [@[showPhotosNavController, flickerSearchNavController] mutableCopy];
     
     [_smc setViewControllers:viewControllers];
     
@@ -76,6 +85,10 @@
                                                            [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8],UITextAttributeTextShadowColor,
                                                            [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
                                                            UITextAttributeTextShadowOffset, nil]];
+    
+//    
+//    [[UIBarButtonItem appearance] setBackgroundImage:[UIImage imageNamed:@"bar_button"] forState: UIControlStateNormal barMetrics:UIBarMetricsDefault];
+
 
 }
 

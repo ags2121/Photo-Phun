@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A98A4F70173A100D0017FF44 /* bar_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A4F6F173A100D0017FF44 /* bar_button@2x.png */; };
+		A98A4F72173A1D2C0017FF44 /* bar_button_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A4F71173A1D2C0017FF44 /* bar_button_selected@2x.png */; };
 		A9C3733317373488006CFFBE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C3733217373488006CFFBE /* UIKit.framework */; };
 		A9C3733517373488006CFFBE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C3733417373488006CFFBE /* Foundation.framework */; };
 		A9C3733717373488006CFFBE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C3733617373488006CFFBE /* CoreGraphics.framework */; };
@@ -47,9 +49,15 @@
 		A9C373D71738594C006CFFBE /* cellBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9C373D317385932006CFFBE /* cellBg@2x.png */; };
 		A9C373D81738594E006CFFBE /* cellBgSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9C373D417385932006CFFBE /* cellBgSelected@2x.png */; };
 		A9C373DB1738B41B006CFFBE /* PPFlickrPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C373DA1738B417006CFFBE /* PPFlickrPhotoCell.m */; };
+		A9EC4A541739BA3000527C32 /* PPAlterImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9EC4A531739BA3000527C32 /* PPAlterImageViewController.m */; };
+		A9EC4A571739C02D00527C32 /* PPShowPhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9EC4A561739C02D00527C32 /* PPShowPhotosViewController.m */; };
+		A9EC4A591739CE6300527C32 /* filterPreviewsTemplate.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9EC4A581739CE6300527C32 /* filterPreviewsTemplate.plist */; };
+		A9EC4A5C1739CF9C00527C32 /* PPFilterPreviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9EC4A5B1739CF9C00527C32 /* PPFilterPreviewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A98A4F6F173A100D0017FF44 /* bar_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar_button@2x.png"; sourceTree = "<group>"; };
+		A98A4F71173A1D2C0017FF44 /* bar_button_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar_button_selected@2x.png"; sourceTree = "<group>"; };
 		A9C3732F17373488006CFFBE /* Photo_Phun.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Photo_Phun.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9C3733217373488006CFFBE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A9C3733417373488006CFFBE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -112,6 +120,13 @@
 		A9C373D417385932006CFFBE /* cellBgSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cellBgSelected@2x.png"; sourceTree = "<group>"; };
 		A9C373D91738B414006CFFBE /* PPFlickrPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPFlickrPhotoCell.h; path = Views/PPFlickrPhotoCell.h; sourceTree = "<group>"; };
 		A9C373DA1738B417006CFFBE /* PPFlickrPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPFlickrPhotoCell.m; path = Views/PPFlickrPhotoCell.m; sourceTree = "<group>"; };
+		A9EC4A521739BA3000527C32 /* PPAlterImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPAlterImageViewController.h; path = ViewControllers/PPAlterImageViewController.h; sourceTree = "<group>"; };
+		A9EC4A531739BA3000527C32 /* PPAlterImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPAlterImageViewController.m; path = ViewControllers/PPAlterImageViewController.m; sourceTree = "<group>"; };
+		A9EC4A551739C02D00527C32 /* PPShowPhotosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPShowPhotosViewController.h; path = ViewControllers/PPShowPhotosViewController.h; sourceTree = "<group>"; };
+		A9EC4A561739C02D00527C32 /* PPShowPhotosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPShowPhotosViewController.m; path = ViewControllers/PPShowPhotosViewController.m; sourceTree = "<group>"; };
+		A9EC4A581739CE6300527C32 /* filterPreviewsTemplate.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = filterPreviewsTemplate.plist; path = Model/filterPreviewsTemplate.plist; sourceTree = "<group>"; };
+		A9EC4A5A1739CF9B00527C32 /* PPFilterPreviewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPFilterPreviewCell.h; path = Views/PPFilterPreviewCell.h; sourceTree = "<group>"; };
+		A9EC4A5B1739CF9C00527C32 /* PPFilterPreviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPFilterPreviewCell.m; path = Views/PPFilterPreviewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +215,7 @@
 				A9C37367173759CD006CFFBE /* FlickrPhoto.m */,
 				A9C373611737483B006CFFBE /* PPDataFetcher.h */,
 				A9C373621737483B006CFFBE /* PPDataFetcher.m */,
+				A9EC4A581739CE6300527C32 /* filterPreviewsTemplate.plist */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -209,8 +225,12 @@
 			children = (
 				A9C373C61738485C006CFFBE /* PPSideMenuController.h */,
 				A9C373C71738485C006CFFBE /* PPSideMenuController.m */,
+				A9EC4A551739C02D00527C32 /* PPShowPhotosViewController.h */,
+				A9EC4A561739C02D00527C32 /* PPShowPhotosViewController.m */,
 				A9C3737A173819AD006CFFBE /* PPFlickrSearchViewController.h */,
 				A9C3737B173819AD006CFFBE /* PPFlickrSearchViewController.m */,
+				A9EC4A521739BA3000527C32 /* PPAlterImageViewController.h */,
+				A9EC4A531739BA3000527C32 /* PPAlterImageViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -218,6 +238,8 @@
 		A9C373A2173844A7006CFFBE /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A98A4F71173A1D2C0017FF44 /* bar_button_selected@2x.png */,
+				A98A4F6F173A100D0017FF44 /* bar_button@2x.png */,
 				A9C373D317385932006CFFBE /* cellBg@2x.png */,
 				A9C373D417385932006CFFBE /* cellBgSelected@2x.png */,
 				A9C373CD1738546C006CFFBE /* nice_nav_bar_image@2x.png */,
@@ -273,6 +295,8 @@
 			children = (
 				A9C373D91738B414006CFFBE /* PPFlickrPhotoCell.h */,
 				A9C373DA1738B417006CFFBE /* PPFlickrPhotoCell.m */,
+				A9EC4A5A1739CF9B00527C32 /* PPFilterPreviewCell.h */,
+				A9EC4A5B1739CF9C00527C32 /* PPFilterPreviewCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -347,6 +371,9 @@
 				A9C373D2173858CA006CFFBE /* swipe_guide2.psd in Resources */,
 				A9C373D71738594C006CFFBE /* cellBg@2x.png in Resources */,
 				A9C373D81738594E006CFFBE /* cellBgSelected@2x.png in Resources */,
+				A9EC4A591739CE6300527C32 /* filterPreviewsTemplate.plist in Resources */,
+				A98A4F70173A100D0017FF44 /* bar_button@2x.png in Resources */,
+				A98A4F72173A1D2C0017FF44 /* bar_button_selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +402,9 @@
 				A9C373CA17384C78006CFFBE /* UIView+Screenshot.m in Sources */,
 				A9C373C81738485C006CFFBE /* PPSideMenuController.m in Sources */,
 				A9C373DB1738B41B006CFFBE /* PPFlickrPhotoCell.m in Sources */,
+				A9EC4A541739BA3000527C32 /* PPAlterImageViewController.m in Sources */,
+				A9EC4A571739C02D00527C32 /* PPShowPhotosViewController.m in Sources */,
+				A9EC4A5C1739CF9C00527C32 /* PPFilterPreviewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,6 +527,7 @@
 				A9C3735417373488006CFFBE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

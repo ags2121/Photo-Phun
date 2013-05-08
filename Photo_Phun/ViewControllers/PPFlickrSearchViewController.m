@@ -7,6 +7,7 @@
 //
 
 #import "PPFlickrSearchViewController.h"
+#import "PPAlterImageViewController.h"
 #import "PPDataFetcher.h"
 #import "PPFlickrPhotoCell.h"
 #import "FlickrPhoto.h"
@@ -98,7 +99,8 @@
     
     NSLog(@"we're searching");
 
-    self.currentSearchTerm = textField.text;
+    self.currentSearchTerm = [self stringByTrimmingTrailingWhitespaceAndNewlineCharacters: textField.text];
+    
     [[PPDataFetcher sharedInstance] beginQuery:self.currentSearchTerm];
     
     [textField resignFirstResponder];
@@ -143,7 +145,7 @@
 }
 
 #pragma mark - UICollectionView Datasource
-// 1
+
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
     
     self.collectionView.hidden = NO;
@@ -152,12 +154,12 @@
     return [self.searchResults count];
     
 }
-// 2
+
 - (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
     //TODO: sort results to provide section structure?
     return 1;
 }
-// 3
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
    PPFlickrPhotoCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"PPFlickrPhotoCell" forIndexPath:indexPath];
     cell.photo = self.searchResults[indexPath.row];
@@ -176,7 +178,10 @@
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Select item
+    FlickrPhoto *photo = self.searchResults[indexPath.row];
+    [self performSegueWithIdentifier:@"flickrToEditSegue"
+                              sender:photo];
+    [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -185,8 +190,6 @@
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout
-
-
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
 
@@ -204,8 +207,15 @@
     return UIEdgeInsetsMake(50, 20, 50, 20);
 }
 
-#pragma mark - keyboard notification callbacks
+#pragma mark - Segue
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"flickrToEditSegue"]) {
+        PPAlterImageViewController *alterImageViewController = segue.destinationViewController;
+        alterImageViewController.flickrPhoto = sender;
+    }
+}
 
+#pragma mark - keyboard notification callbacks
 - (void)keyboardDidShow: (NSNotification *) notif{
     _isKeyboardShowing = YES;
 }
@@ -216,7 +226,6 @@
 
 
 #pragma mark - gestureRecognizer delegate
-
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     if (gestureRecognizer == self.tapOffOfKeyboard && self.isKeyboardShowing){
@@ -234,6 +243,22 @@
     [self.textField resignFirstResponder];
 }
 
+#pragma mark - some nice NSString methods for trimming whitespace
+- (NSString *)string:(NSString*)original ByTrimmingTrailingCharactersInSet:(NSCharacterSet *)characterSet {
+    
+    NSRange rangeOfLastWantedCharacter = [original rangeOfCharacterFromSet:[characterSet invertedSet]
+                                                               options:NSBackwardsSearch];
+    if (rangeOfLastWantedCharacter.location == NSNotFound) {
+        return @"";
+    }
+    return [original substringToIndex:rangeOfLastWantedCharacter.location+1]; // non-inclusive
+}
+
+- (NSString *)stringByTrimmingTrailingWhitespaceAndNewlineCharacters:(NSString*)original
+{
+    return [self string: original ByTrimmingTrailingCharactersInSet:
+            [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
 
 /*TODO: cache for large images
 //init thumbnailCache if its nil
