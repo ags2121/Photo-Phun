@@ -10,6 +10,8 @@
 #import "FlickrPhoto.h"
 #import "PPDataFetcher.h"
 
+static CGFloat kImageViewSize = 520.0;
+
 @interface PPAlterImageViewController ()
 
 @property (strong, nonatomic) NSArray *filterPreviewsInfo;
@@ -39,16 +41,18 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     if(self.flickrPhoto.largeImage) {
-        self.largeImage.image = [PPAlterImageViewController cropBiggestCenteredSquareImageFromImage: self.flickrPhoto.largeImage withSide:520.0];
+
+        self.largeImage.image = self.flickrPhoto.largeImage;
     }
     else {
         
-        self.largeImage.image = [PPAlterImageViewController cropBiggestCenteredSquareImageFromImage: self.flickrPhoto.thumbnail withSide:520.0];
+        self.largeImage.image = [self resizeImageToView:self.flickrPhoto.thumbnail];
         
         [PPDataFetcher loadImageForPhoto:self.flickrPhoto thumbnail:NO completionBlock:^(UIImage *photoImage, NSError *error) {
             if(!error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.largeImage.image = [PPAlterImageViewController cropBiggestCenteredSquareImageFromImage: self.flickrPhoto.largeImage withSide:520.0];
+                    self.flickrPhoto.largeImage = [self resizeImageToView:photoImage];
+                    self.largeImage.image = self.flickrPhoto.largeImage;
                 });
             }
         }];
@@ -62,57 +66,78 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)configureImageViewBorder:(CGFloat)borderWidth
+
+#pragma mark - Image Manipulation methods
+
+-(UIImage*)resizeImageToView:(UIImage*)image
 {
-    CALayer* layer = [self.largeImage layer];
-    [layer setBorderWidth:borderWidth];
-    //[self.largeImage setContentMode:UIViewContentModeCenter];
-    [layer setBorderColor:[UIColor whiteColor].CGColor];
-    [layer setShadowOffset:CGSizeMake(-3.0, 3.0)];
-    [layer setShadowRadius:3.0];
-    [layer setShadowOpacity:1.0];
+
+    NSArray *faceFeatures = [PPAlterImageViewController detectFace:image];
+    if (faceFeatures.count > 0){
+        CIFaceFeature *face = faceFeatures[0];
+        CGPoint centerOfFace = face.mouthPosition;
+        NSLog(@"Center of face %@", NSStringFromCGPoint(centerOfFace));
+        NSLog(@"image dimensions %@", NSStringFromCGSize( image.size ));
+        
+        CGRect newRect;
+        if (centerOfFace.x < centerOfFace.y) {
+
+            if(centerOfFace.y >= image.size.width)
+                newRect = CGRectMake(0, image.size.height / 2, image.size.height / 2, image.size.height / 2);
+            else
+                newRect = CGRectMake(0, 0, MIN(image.size.height, image.size.width), MIN(image.size.height, image.size.width));
+            
+            return [PPAlterImageViewController imageByCropping:image toFrame:newRect];
+        }
+
+        else if (centerOfFace.y < centerOfFace.x) {
+
+            if(centerOfFace.x >= image.size.height)
+                newRect = CGRectMake(image.size.width / 2, 0, MIN(image.size.height, image.size.width/2), MIN(image.size.height, image.size.width/2));
+            else
+                newRect = CGRectMake(0, 0, MIN(image.size.height, image.size.width), MIN(image.size.height, image.size.width));
+            return [PPAlterImageViewController imageByCropping:image toFrame:newRect];
+        }
+
+        else if (image.size.height != image.size.width) { //and centerOfFace.y == centerOfFace.x
+            CGFloat side = MIN(image.size.height, image.size.width);
+            return [PPAlterImageViewController imageByCropping:image toFrame:CGRectMake(0.0, 0.0, side, side)];
+        }
+    }
+    //else if no face detection
+    return [PPAlterImageViewController cropBiggestCenteredSquareImageFromImage: image withSide:kImageViewSize];
 }
 
--(void)configureNavBarAndButton
+
++(NSArray*)detectFace:(UIImage*)image
 {
-    _navBar = [[UINavigationBar alloc] init];
-    [_navBar setFrame:CGRectMake(0,0,self.view.bounds.size.width,52)];
-    [self.view addSubview:_navBar];
-    UINavigationItem *navItem = [[UINavigationItem alloc]initWithTitle:@"Edit Photo"];
-    
-    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    doneButton.userInteractionEnabled = YES;
-    [doneButton setBackgroundImage:[UIImage imageNamed:@"bar_button"] forState:UIControlStateNormal];
-    [doneButton setBackgroundImage:[UIImage imageNamed:@"bar_button_selected"] forState:UIControlStateSelected | UIControlStateHighlighted];
-    [doneButton setShowsTouchWhenHighlighted:YES];
-    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
-    [doneButton.layer setCornerRadius:4.0f];
-    [doneButton.layer setMasksToBounds:YES];
-    [doneButton.layer setBorderWidth:1.0f];
-    [doneButton.layer setBorderColor: [[UIColor grayColor] CGColor]];
-    doneButton.frame = CGRectMake(0.0, 100.0, 60.0, 30.0);
-    [doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
-    [navItem setLeftBarButtonItem:doneBtn];
-    [_navBar setItems:@[navItem]];
+    NSDictionary *detectorOptions = [NSDictionary dictionaryWithObject:CIDetectorAccuracyLow
+                                                                forKey:CIDetectorAccuracy];
+    CIImage *ciImage = [[CIImage alloc] initWithImage:image];
+    CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil options:detectorOptions];
+    return [detector featuresInImage:ciImage];
 }
 
-- (UIImage *)imageByCropping:(UIImage *)image toSize:(CGSize)size
++(UIImage *)imageByCropping:(UIImage *)image toFrame:(CGRect)newRect
 {
-    double x = (image.size.width - size.width) / 2.0;
-    double y = (image.size.height - size.height) / 2.0;
+    NSLog(@"New rect: %@", NSStringFromCGRect(newRect));
     
-    CGRect cropRect = CGRectMake(x, y, size.height, size.width);
-    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], cropRect);
-    
+    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], newRect);
     UIImage *cropped = [UIImage imageWithCGImage:imageRef];
-    CGImageRelease(imageRef);
     
+    NSLog(@"dimensions after first crop: %@", NSStringFromCGSize(cropped.size));
+    
+    if (cropped.size.width > kImageViewSize){
+        cropped = [UIImage imageWithCGImage:cropped.CGImage scale:(cropped.size.width/kImageViewSize) orientation:cropped.imageOrientation];
+        NSLog(@"dimensions after first crop: %@", NSStringFromCGSize(cropped.size));
+    }
+    
+    CGImageRelease(imageRef);
+
     return cropped;
 }
 
-+ (UIImage*) cropBiggestCenteredSquareImageFromImage:(UIImage*)image withSide:(CGFloat)side
++(UIImage*) cropBiggestCenteredSquareImageFromImage:(UIImage*)image withSide:(CGFloat)side
 {
     // Get size of current image
     CGSize size = [image size];
@@ -160,6 +185,7 @@
     return newImage;
 }
 
+#pragma mark - UICollectionView Datasource
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
     
     return [self.filterPreviewsInfo count];
@@ -175,7 +201,8 @@
     //TODO: return cell
 }
 
-#pragma mark - UICollectionViewDelegate
+#pragma mark - UICollectionView Delegate
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     // TODO: Select item
@@ -189,4 +216,42 @@
 - (IBAction)doneButtonPressed:(id)sender {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
 }
+
+#pragma mark - View Set Up Methods
+
+-(void)configureImageViewBorder:(CGFloat)borderWidth
+{
+    CALayer* layer = [self.largeImage layer];
+    [layer setBorderWidth:borderWidth];
+    [layer setBorderColor:[UIColor whiteColor].CGColor];
+    [layer setShadowOffset:CGSizeMake(-3.0, 3.0)];
+    [layer setShadowRadius:3.0];
+    [layer setShadowOpacity:1.0];
+}
+
+-(void)configureNavBarAndButton
+{
+    _navBar = [[UINavigationBar alloc] init];
+    [_navBar setFrame:CGRectMake(0,0,self.view.bounds.size.width,52)];
+    [self.view addSubview:_navBar];
+    UINavigationItem *navItem = [[UINavigationItem alloc]initWithTitle:@"Edit Photo"];
+    
+    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    doneButton.userInteractionEnabled = YES;
+    [doneButton setBackgroundImage:[UIImage imageNamed:@"bar_button"] forState:UIControlStateNormal];
+    [doneButton setBackgroundImage:[UIImage imageNamed:@"bar_button_selected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [doneButton setShowsTouchWhenHighlighted:YES];
+    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [doneButton.layer setCornerRadius:4.0f];
+    [doneButton.layer setMasksToBounds:YES];
+    [doneButton.layer setBorderWidth:1.0f];
+    [doneButton.layer setBorderColor: [[UIColor grayColor] CGColor]];
+    doneButton.frame = CGRectMake(0.0, 100.0, 60.0, 30.0);
+    [doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
+    [navItem setLeftBarButtonItem:doneBtn];
+    [_navBar setItems:@[navItem]];
+}
+
 @end
