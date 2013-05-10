@@ -2,11 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <array>
-	<dict>
-		<key>filterName</key>
-		<string>Sepia</string>
-		<key>imagePath</key>
-		<string></string>
-	</dict>
+	<string>Original</string>
+	<string>Sepia</string>
+	<string>Lighten</string>
+	<string>Brighten</string>
+	<string>Invert</string>
+	<string>Hue</string>
+	<string>Blur</string>
+	<string>Bump</string>
 </array>
 </plist>

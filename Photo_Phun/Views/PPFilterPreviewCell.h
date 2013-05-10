@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface PPFilterPreviewCell : UICollectionViewCell
+@property (weak, nonatomic) IBOutlet UILabel *filterName;
+@property (weak, nonatomic) IBOutlet UIImageView *previewImage;
 
 @end

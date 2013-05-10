@@ -9,18 +9,26 @@
 #import "PPAlterImageViewController.h"
 #import "FlickrPhoto.h"
 #import "PPDataFetcher.h"
+#import "PPFilterPreviewCell.h"
 
-static CGFloat kImageViewSize = 520.0;
+static CGFloat kImageViewSize = 560.0;
 
 @interface PPAlterImageViewController ()
 
 @property (strong, nonatomic) NSArray *filterPreviewsInfo;
-
+@property (strong, nonatomic) NSMutableDictionary *filters;
 @property (strong, nonatomic) UINavigationBar *navBar;
+
+@property (strong,nonatomic) CIContext *context;
+@property (strong,nonatomic) CIFilter *filter;
+@property (strong,nonatomic) CIImage *beginImage;
+
+@property (strong, nonatomic) NSIndexPath *selectedCellIndexPath;
 
 @end
 
 @implementation PPAlterImageViewController
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,27 +42,41 @@ static CGFloat kImageViewSize = 520.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //disable filter options until image is loaded
+    [self.filterPreviewCollectionView setHidden:YES];
     [self configureImageViewBorder:10.0];
     [self configureNavBarAndButton];
+    [self.activityIndicator startAnimating];
+    self.context = [CIContext contextWithOptions:nil];
+    
+    self.filterPreviewsInfo = [NSArray arrayWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"filterPreviewsTemplate" withExtension:@"plist"]];
 }
 
+//Choosing to freeze the filter controls until the high quality image loads
 -(void)viewDidAppear:(BOOL)animated
 {
     if(self.flickrPhoto.largeImage) {
 
         self.largeImage.image = self.flickrPhoto.largeImage;
+        [self.activityIndicator stopAnimating];
+        [self.filterPreviewCollectionView setHidden:NO];
     }
     else {
         
         self.largeImage.image = [self resizeImageToView:self.flickrPhoto.thumbnail];
-        
+
         [PPDataFetcher loadImageForPhoto:self.flickrPhoto thumbnail:NO completionBlock:^(UIImage *photoImage, NSError *error) {
             if(!error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.activityIndicator stopAnimating];
+                    [self.filterPreviewCollectionView setHidden:NO];
                     self.flickrPhoto.largeImage = [self resizeImageToView:photoImage];
                     self.largeImage.image = self.flickrPhoto.largeImage;
+                    [self.filterPreviewCollectionView setNeedsDisplay];
                 });
             }
+            else self.largeImage.image = [UIImage imageNamed:@"image_download_error"];
+            [self.activityIndicator stopAnimating];
         }];
     }
     
@@ -83,7 +105,7 @@ static CGFloat kImageViewSize = 520.0;
         if (centerOfFace.x < centerOfFace.y) {
 
             if(centerOfFace.y >= image.size.width)
-                newRect = CGRectMake(0, image.size.height / 2, image.size.height / 2, image.size.height / 2);
+                newRect = CGRectMake(0, image.size.height/2, MIN(image.size.height/2, image.size.width), MIN(image.size.height/2, image.size.width));
             else
                 newRect = CGRectMake(0, 0, MIN(image.size.height, image.size.width), MIN(image.size.height, image.size.width));
             
@@ -93,7 +115,7 @@ static CGFloat kImageViewSize = 520.0;
         else if (centerOfFace.y < centerOfFace.x) {
 
             if(centerOfFace.x >= image.size.height)
-                newRect = CGRectMake(image.size.width / 2, 0, MIN(image.size.height, image.size.width/2), MIN(image.size.height, image.size.width/2));
+                newRect = CGRectMake(image.size.width/2, 0, MIN(image.size.height, image.size.width/2), MIN(image.size.height, image.size.width/2));
             else
                 newRect = CGRectMake(0, 0, MIN(image.size.height, image.size.width), MIN(image.size.height, image.size.width));
             return [PPAlterImageViewController imageByCropping:image toFrame:newRect];
@@ -129,7 +151,7 @@ static CGFloat kImageViewSize = 520.0;
     
     if (cropped.size.width > kImageViewSize){
         cropped = [UIImage imageWithCGImage:cropped.CGImage scale:(cropped.size.width/kImageViewSize) orientation:cropped.imageOrientation];
-        NSLog(@"dimensions after first crop: %@", NSStringFromCGSize(cropped.size));
+        NSLog(@"dimensions after second crop: %@", NSStringFromCGSize(cropped.size));
     }
     
     CGImageRelease(imageRef);
@@ -189,7 +211,6 @@ static CGFloat kImageViewSize = 520.0;
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
     
     return [self.filterPreviewsInfo count];
-    
 }
 
 - (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
@@ -198,23 +219,143 @@ static CGFloat kImageViewSize = 520.0;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    //TODO: return cell
+    PPFilterPreviewCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"PPFilterPreviewCell" forIndexPath:indexPath];
+    
+    if (cell.selected) {
+        cell.layer.borderWidth = 3.0f;
+        cell.layer.borderColor = [[UIColor magentaColor] CGColor]; // highlight selection
+    }
+    else
+        cell.layer.borderWidth = 0.0f; // Default
+    
+    NSString *filterName = self.filterPreviewsInfo[indexPath.row];
+    NSLog(@"name: %@", filterName);
+    cell.filterName.text = filterName;
+    cell.previewImage.image = [UIImage imageNamed:filterName];
+    return cell;
 }
 
 #pragma mark - UICollectionView Delegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Select item
+    
+    PPFilterPreviewCell *cell = (PPFilterPreviewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    self.selectedCellIndexPath = indexPath;
+    NSLog(@"indexpath %@", indexPath);
+    //give cell a border
+    cell.layer.borderWidth = 3.0f;
+    cell.layer.borderColor = [[UIColor magentaColor] CGColor];
+    
+    //lazy building of filters; we wait until user first taps cell
+    if(!self.beginImage){
+        [self buildFilters];
+    }
+    
+    if(indexPath.row == 0)
+       [self resetImage];
+    else{
+        NSString *filterName = self.filterPreviewsInfo[indexPath.row];
+        CIFilter *filterToApply = self.filters[filterName];
+        [self applyFilterToImage:filterToApply];
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Deselect item
+    PPFilterPreviewCell *cell = (PPFilterPreviewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    cell.layer.borderWidth = 0.0;    
 }
 
-- (IBAction)doneButtonPressed:(id)sender {
+- (IBAction)cancelButtonPressed:(id)sender {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
+}
+
+
+#pragma mark - Filter Methods
+
+-(void)buildFilters
+{
+    [self.activityIndicator stopAnimating];
+    //MAKE SURE FILTER NAMES MATCH THE NAMES IN THE PLIST TEMPLATE
+    
+    self.beginImage = [[CIImage alloc] initWithImage:self.largeImage.image];
+    
+    self.filters = [@{} mutableCopy];
+    
+    //sepia
+    CIFilter *sepiaFilter = [CIFilter filterWithName:@"CISepiaTone"
+               keysAndValues:kCIInputImageKey, self.beginImage, @"inputIntensity",
+     @0.8, nil];
+    [self.filters setObject:sepiaFilter forKey:@"Sepia"];
+    
+    //brighten
+    CIFilter *brightnesContrastFilter = [CIFilter filterWithName:@"CIColorControls"
+                                       keysAndValues:kCIInputImageKey, self.beginImage, @"inputBrightness", @0.5, @"inputContrast", @2.0, nil];
+    [self.filters setObject:brightnesContrastFilter forKey:@"Brighten"];
+    
+    //invert
+    CIFilter *invertFilter = [CIFilter filterWithName:@"CIColorInvert"];
+    [invertFilter setDefaults];
+    [invertFilter setValue: self.beginImage forKey: kCIInputImageKey];
+    [self.filters setObject:invertFilter forKey:@"Invert"];
+    
+    //hue
+    CIFilter *hueFilter = [CIFilter filterWithName:@"CIHueAdjust"];
+    [hueFilter setDefaults];
+    [hueFilter setValue: self.beginImage forKey: kCIInputImageKey];
+    [hueFilter setValue: [NSNumber numberWithFloat: 3.0f] forKey: @"inputAngle"];
+    [self.filters setObject:hueFilter forKey:@"Hue"];
+    
+    
+    //blur
+    CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur" keysAndValues:kCIInputImageKey, self.beginImage, @"inputRadius", @10.0, nil];
+    
+    CIVector *point0 =[CIVector vectorWithX:0.0 Y:(0.75 * 4.0)];
+    CIVector *point1 =[CIVector vectorWithX:0.0 Y:(0.5*4.0)];
+    CIColor *color0 = [CIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0];
+    CIColor *color1 = [CIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.0];
+    CIFilter *gradient1 = [CIFilter filterWithName:@"CILinearGradient" keysAndValues:@"inputPoint0", point0, @"inputColor0", color0, @"inputPoint1", point1, @"inputColor1", color1, nil];
+    
+    point0 =[CIVector vectorWithX:0.0 Y:(0.25 * 4.0)];
+    CIFilter *gradient2 = [CIFilter filterWithName:@"CILinearGradient" keysAndValues:@"inputPoint0", point0, @"inputColor0", color0, @"inputPoint1", point1, @"inputColor1", color1, nil];
+    
+    CIFilter *mask = [CIFilter filterWithName:@"CIAdditionCompositing" keysAndValues:kCIInputImageKey, gradient1.outputImage, kCIInputBackgroundImageKey, gradient2.outputImage, nil];
+    
+    CIFilter *blendMask = [CIFilter filterWithName:@"CIBlendWithMask" keysAndValues:kCIInputImageKey, blurFilter.outputImage, kCIInputBackgroundImageKey, self.beginImage, @"inputMaskImage", mask.outputImage, nil];
+    [self.filters setObject:blendMask forKey:@"Blur"];
+    
+    //shadow
+    CIFilter *highlightShadowAdjustFilter = [CIFilter filterWithName:@"CIHighlightShadowAdjust"];
+    [highlightShadowAdjustFilter setDefaults];
+    [highlightShadowAdjustFilter setValue: self.beginImage forKey: kCIInputImageKey];
+    [highlightShadowAdjustFilter setValue: @1.0 forKey:@"inputHighlightAmount"];
+    [highlightShadowAdjustFilter setValue:@8.5 forKey:@"inputShadowAmount"];
+    [self.filters setObject:highlightShadowAdjustFilter forKey:@"Lighten"];
+    
+    //bump
+    CIFilter *bumpDistortion = [CIFilter filterWithName:@"CIBumpDistortion"];
+    [bumpDistortion setValue:self.beginImage forKey:kCIInputImageKey];
+    [bumpDistortion setValue:[CIVector vectorWithX:kImageViewSize/2 Y:kImageViewSize/2] forKey:@"inputCenter"];
+    [bumpDistortion setValue:[NSNumber numberWithFloat:kImageViewSize/2] forKey:@"inputRadius"];
+    [bumpDistortion setValue:[NSNumber numberWithFloat:0.5] forKey:@"inputScale"];
+    [self.filters setObject:bumpDistortion forKey:@"Bump"];
+    
+}
+
+-(void)applyFilterToImage:(CIFilter*)filter
+{
+    CIImage *outputImage = [filter outputImage];
+    CGImageRef cgimg = [self.context createCGImage:outputImage fromRect:[outputImage extent]];
+    UIImage *newImage = [UIImage imageWithCGImage:cgimg];
+    self.largeImage.image = newImage;
+    
+    CGImageRelease(cgimg);
+}
+
+-(void)resetImage
+{
+    self.largeImage.image = self.flickrPhoto.largeImage;
 }
 
 #pragma mark - View Set Up Methods
@@ -236,21 +377,21 @@ static CGFloat kImageViewSize = 520.0;
     [self.view addSubview:_navBar];
     UINavigationItem *navItem = [[UINavigationItem alloc]initWithTitle:@"Edit Photo"];
     
-    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    doneButton.userInteractionEnabled = YES;
-    [doneButton setBackgroundImage:[UIImage imageNamed:@"bar_button"] forState:UIControlStateNormal];
-    [doneButton setBackgroundImage:[UIImage imageNamed:@"bar_button_selected"] forState:UIControlStateSelected | UIControlStateHighlighted];
-    [doneButton setShowsTouchWhenHighlighted:YES];
-    [doneButton setTitle:@"Done" forState:UIControlStateNormal];
-    [doneButton.layer setCornerRadius:4.0f];
-    [doneButton.layer setMasksToBounds:YES];
-    [doneButton.layer setBorderWidth:1.0f];
-    [doneButton.layer setBorderColor: [[UIColor grayColor] CGColor]];
-    doneButton.frame = CGRectMake(0.0, 100.0, 60.0, 30.0);
-    [doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelButton.userInteractionEnabled = YES;
+    [cancelButton setBackgroundImage:[UIImage imageNamed:@"bar_button"] forState:UIControlStateNormal];
+//    [cancelButton setBackgroundImage:[UIImage imageNamed:@"bar_button_selected"] forState:UIControlStateSelected | UIControlStateHighlighted];
+    [cancelButton setShowsTouchWhenHighlighted:YES];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelButton.layer setCornerRadius:4.0f];
+    [cancelButton.layer setMasksToBounds:YES];
+    [cancelButton.layer setBorderWidth:1.0f];
+    [cancelButton.layer setBorderColor: [[UIColor grayColor] CGColor]];
+    cancelButton.frame = CGRectMake(0.0, 100.0, 60.0, 30.0);
+    [cancelButton addTarget:self action:@selector(cancelButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
-    [navItem setLeftBarButtonItem:doneBtn];
+    UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc] initWithCustomView:cancelButton];
+    [navItem setLeftBarButtonItem:cancelBtn];
     [_navBar setItems:@[navItem]];
 }
 

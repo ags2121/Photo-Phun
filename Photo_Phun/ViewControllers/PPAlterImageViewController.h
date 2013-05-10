@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *largeImage;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterPreviewCollectionView;
 
-- (IBAction)doneButtonPressed:(id)sender;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
+- (IBAction)cancelButtonPressed:(id)sender;
 
 @end
