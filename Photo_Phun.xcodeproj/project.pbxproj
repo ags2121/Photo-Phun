@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9349652173DB5A800A4C0CB /* PPPaintView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9349651173DB5A800A4C0CB /* PPPaintView.m */; };
 		A98A4F70173A100D0017FF44 /* bar_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A4F6F173A100D0017FF44 /* bar_button@2x.png */; };
 		A98A4F72173A1D2C0017FF44 /* bar_button_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A4F71173A1D2C0017FF44 /* bar_button_selected@2x.png */; };
 		A98A8024173B13B20046D64C /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98A8023173B13B20046D64C /* CoreImage.framework */; };
@@ -66,6 +67,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A9349650173DB5A800A4C0CB /* PPPaintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPPaintView.h; path = Views/PPPaintView.h; sourceTree = "<group>"; };
+		A9349651173DB5A800A4C0CB /* PPPaintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPPaintView.m; path = Views/PPPaintView.m; sourceTree = "<group>"; };
 		A98A4F6F173A100D0017FF44 /* bar_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar_button@2x.png"; sourceTree = "<group>"; };
 		A98A4F71173A1D2C0017FF44 /* bar_button_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar_button_selected@2x.png"; sourceTree = "<group>"; };
 		A98A8023173B13B20046D64C /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
@@ -328,6 +331,8 @@
 				A9C373DA1738B417006CFFBE /* PPFlickrPhotoCell.m */,
 				A9EC4A5A1739CF9B00527C32 /* PPFilterPreviewCell.h */,
 				A9EC4A5B1739CF9C00527C32 /* PPFilterPreviewCell.m */,
+				A9349650173DB5A800A4C0CB /* PPPaintView.h */,
+				A9349651173DB5A800A4C0CB /* PPPaintView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -445,6 +450,7 @@
 				A9EC4A541739BA3000527C32 /* PPAlterImageViewController.m in Sources */,
 				A9EC4A571739C02D00527C32 /* PPShowPhotosViewController.m in Sources */,
 				A9EC4A5C1739CF9C00527C32 /* PPFilterPreviewCell.m in Sources */,
+				A9349652173DB5A800A4C0CB /* PPPaintView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

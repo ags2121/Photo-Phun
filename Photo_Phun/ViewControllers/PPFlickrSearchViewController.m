@@ -48,8 +48,6 @@
     [self.tapOffOfKeyboard setDelegate:self];
     [self.view addGestureRecognizer:self.tapOffOfKeyboard];
     
-    [self.collectionView registerClass: [UICollectionReusableView class]forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"spaceHeader"];
-    
     [self registerNotifications];
 }
 
@@ -170,14 +168,6 @@
     return cell;
 }
 
-- (UICollectionReusableView *)collectionView:
-(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:
-                                          UICollectionElementKindSectionHeader withReuseIdentifier:@"spaceHeader" forIndexPath:indexPath];
-    
-    return headerView;
-}
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {

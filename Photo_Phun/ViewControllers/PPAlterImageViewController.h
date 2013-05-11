@@ -7,17 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PPPaintView.h"
 
 @class FlickrPhoto;
 
-@interface PPAlterImageViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
+@interface PPAlterImageViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate, PaintViewDelegate>
+
+- (void)paintView:(PPPaintView*)paintView finishedTrackingPath:(CGPathRef)path inRect:(CGRect)painted;
 
 @property(nonatomic, strong) FlickrPhoto *flickrPhoto;
 @property (weak, nonatomic) IBOutlet UIImageView *largeImage;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterPreviewCollectionView;
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *doneButton;
+@property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
+@property (weak, nonatomic) IBOutlet UILabel *attributedStringLabel;
 
 - (IBAction)cancelButtonPressed:(id)sender;
+- (IBAction)doneButtonPressed:(id)sender;
 
 @end

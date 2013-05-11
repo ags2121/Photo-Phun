@@ -88,8 +88,7 @@
     
 //    
 //    [[UIBarButtonItem appearance] setBackgroundImage:[UIImage imageNamed:@"bar_button"] forState: UIControlStateNormal barMetrics:UIBarMetricsDefault];
-
-
+    [[UIBarButtonItem appearance] setTintColor:[UIColor colorWithPatternImage: [UIImage imageNamed:@"bar_button"]]];
 }
 
 @end

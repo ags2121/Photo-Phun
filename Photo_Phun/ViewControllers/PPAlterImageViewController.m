@@ -23,7 +23,12 @@ static CGFloat kImageViewSize = 560.0;
 @property (strong,nonatomic) CIFilter *filter;
 @property (strong,nonatomic) CIImage *beginImage;
 
-@property (strong, nonatomic) NSIndexPath *selectedCellIndexPath;
+@property BOOL shouldMerge;
+@property (strong, nonatomic) PPPaintView *paintView;
+
+@property (strong, nonatomic) NSMutableAttributedString *onDrawString;
+@property (strong, nonatomic) NSMutableAttributedString *offDrawString;
+@property BOOL blinkStatus;
 
 @end
 
@@ -42,14 +47,15 @@ static CGFloat kImageViewSize = 560.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //disable filter options until image is loaded
-    [self.filterPreviewCollectionView setHidden:YES];
+    [self.filterPreviewCollectionView setHidden:YES]; //hide filter options until image is loaded
+    self.doneButton.enabled = NO; //hack way of hiding done button until picture properly loads
     [self configureImageViewBorder:10.0];
-    [self configureNavBarAndButton];
     [self.activityIndicator startAnimating];
     self.context = [CIContext contextWithOptions:nil];
     
     self.filterPreviewsInfo = [NSArray arrayWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"filterPreviewsTemplate" withExtension:@"plist"]];
+    
+    self.shouldMerge = YES;
 }
 
 //Choosing to freeze the filter controls until the high quality image loads
@@ -60,6 +66,7 @@ static CGFloat kImageViewSize = 560.0;
         self.largeImage.image = self.flickrPhoto.largeImage;
         [self.activityIndicator stopAnimating];
         [self.filterPreviewCollectionView setHidden:NO];
+        self.doneButton.enabled = YES;
     }
     else {
         
@@ -70,8 +77,11 @@ static CGFloat kImageViewSize = 560.0;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.activityIndicator stopAnimating];
                     [self.filterPreviewCollectionView setHidden:NO];
+                    
                     self.flickrPhoto.largeImage = [self resizeImageToView:photoImage];
                     self.largeImage.image = self.flickrPhoto.largeImage;
+                    
+                    self.doneButton.enabled = YES; 
                     [self.filterPreviewCollectionView setNeedsDisplay];
                 });
             }
@@ -87,7 +97,6 @@ static CGFloat kImageViewSize = 560.0;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 #pragma mark - Image Manipulation methods
 
@@ -129,7 +138,6 @@ static CGFloat kImageViewSize = 560.0;
     //else if no face detection
     return [PPAlterImageViewController cropBiggestCenteredSquareImageFromImage: image withSide:kImageViewSize];
 }
-
 
 +(NSArray*)detectFace:(UIImage*)image
 {
@@ -229,7 +237,6 @@ static CGFloat kImageViewSize = 560.0;
         cell.layer.borderWidth = 0.0f; // Default
     
     NSString *filterName = self.filterPreviewsInfo[indexPath.row];
-    NSLog(@"name: %@", filterName);
     cell.filterName.text = filterName;
     cell.previewImage.image = [UIImage imageNamed:filterName];
     return cell;
@@ -241,8 +248,6 @@ static CGFloat kImageViewSize = 560.0;
 {
     
     PPFilterPreviewCell *cell = (PPFilterPreviewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-    self.selectedCellIndexPath = indexPath;
-    NSLog(@"indexpath %@", indexPath);
     //give cell a border
     cell.layer.borderWidth = 3.0f;
     cell.layer.borderColor = [[UIColor magentaColor] CGColor];
@@ -266,11 +271,6 @@ static CGFloat kImageViewSize = 560.0;
     PPFilterPreviewCell *cell = (PPFilterPreviewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     cell.layer.borderWidth = 0.0;    
 }
-
-- (IBAction)cancelButtonPressed:(id)sender {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
-}
-
 
 #pragma mark - Filter Methods
 
@@ -370,29 +370,139 @@ static CGFloat kImageViewSize = 560.0;
     [layer setShadowOpacity:1.0];
 }
 
--(void)configureNavBarAndButton
+-(IBAction)cancelButtonPressed:(id)sender {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
+}
+
+- (IBAction)doneButtonPressed:(id)sender {
+    
+    if([self.doneButton.title isEqualToString:@"Done"]) {
+        NSLog(@"done button pressed");
+        self.navigationBar.title = @"Deface Photo";
+        self.doneButton.title = @"Save";
+        
+        //remove filter options
+        [UIView animateWithDuration:0.8 animations:^{
+            self.filterPreviewCollectionView.alpha = 0.0;
+            self.filterPreviewCollectionView.center = CGPointMake(160, 480);
+        } completion:^(BOOL finished) {
+            [self.filterPreviewCollectionView removeFromSuperview];
+        }];
+        
+        //show paintview
+        self.paintView = [[PPPaintView alloc] initWithFrame:self.largeImage.bounds];
+        self.paintView.lineColor = [UIColor grayColor];
+        self.paintView.delegate = self;
+        [self.largeImage addSubview:self.paintView];
+        
+        //start blinking text
+        [self buildAttributedStrings];
+        NSTimer *blinkTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval)1.0 target:self selector:@selector(blink:) userInfo:nil repeats:YES];
+        [[NSRunLoop mainRunLoop] addTimer: blinkTimer forMode:NSRunLoopCommonModes];
+        self.blinkStatus = YES;
+        
+    }
+    else{
+        NSLog(@"save button pressed");
+        [self saveImageToPhotoLibrary:self.largeImage.image];
+        //TODO: prompt user to ask if ok to save in photo directory
+        //TODO: save photo to NSUserDefaults
+        //TODO: figure out how you want to transition to a "share photo" prompt
+    }
+
+}
+
+-(void)buildAttributedStrings
 {
-    _navBar = [[UINavigationBar alloc] init];
-    [_navBar setFrame:CGRectMake(0,0,self.view.bounds.size.width,52)];
-    [self.view addSubview:_navBar];
-    UINavigationItem *navItem = [[UINavigationItem alloc]initWithTitle:@"Edit Photo"];
+    self.onDrawString = [[NSMutableAttributedString alloc] initWithString:@"DRAW"];
+    NSInteger _stringLength=[self.onDrawString length];
     
-    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancelButton.userInteractionEnabled = YES;
-    [cancelButton setBackgroundImage:[UIImage imageNamed:@"bar_button"] forState:UIControlStateNormal];
-//    [cancelButton setBackgroundImage:[UIImage imageNamed:@"bar_button_selected"] forState:UIControlStateSelected | UIControlStateHighlighted];
-    [cancelButton setShowsTouchWhenHighlighted:YES];
-    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    [cancelButton.layer setCornerRadius:4.0f];
-    [cancelButton.layer setMasksToBounds:YES];
-    [cancelButton.layer setBorderWidth:1.0f];
-    [cancelButton.layer setBorderColor: [[UIColor grayColor] CGColor]];
-    cancelButton.frame = CGRectMake(0.0, 100.0, 60.0, 30.0);
-    [cancelButton addTarget:self action:@selector(cancelButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIColor *_red=[UIColor redColor];
+    UIFont *font=[UIFont fontWithName:@"Helvetica-Bold" size:30.0f];
+
+    //TODO: center the text
     
-    UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc] initWithCustomView:cancelButton];
-    [navItem setLeftBarButtonItem:cancelBtn];
-    [_navBar setItems:@[navItem]];
+    [self.onDrawString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, _stringLength)];
+    [self.onDrawString addAttribute:NSStrokeColorAttributeName value:_red range:NSMakeRange(0, _stringLength)];
+    [self.onDrawString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat:-3.0] range:NSMakeRange(0, _stringLength)];
+
+    self.offDrawString = [[NSMutableAttributedString alloc] initWithString:@"DRAW"];
+    UIColor *_green=[UIColor greenColor];
+    [self.offDrawString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, _stringLength)];
+    [self.offDrawString addAttribute:NSForegroundColorAttributeName value:_green range:NSMakeRange(0, _stringLength)];
+    [self.offDrawString addAttribute:NSStrokeColorAttributeName value:_red range:NSMakeRange(0, _stringLength)];
+    [self.offDrawString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat:-3.0] range:NSMakeRange(0, _stringLength)];
+}
+
+-(void)blink:(NSTimer*)timer
+{
+    if(self.blinkStatus == NO){
+        self.attributedStringLabel.attributedText = self.onDrawString;
+        self.blinkStatus = YES;
+    }else {
+        self.attributedStringLabel.attributedText = self.offDrawString;
+        self.blinkStatus = NO;
+    }
+}
+
+#pragma mark - Paint View Delegagte Protocol Methods
+/*******************************************************************************
+ * @method          paintView:
+ * @abstract
+ * @description
+ *******************************************************************************/
+- (void)paintView:(PPPaintView*)paintView finishedTrackingPath:(CGPathRef)path inRect:(CGRect)painted
+{
+    if (self.shouldMerge) {
+        [self mergePaintToImageView:painted];
+    }
+}
+
+/*******************************************************************************
+ * @method          mergePaintTolargeImage
+ * @abstract        Combine the last painted image into the current background image
+ * @description
+ *******************************************************************************/
+- (void)mergePaintToImageView:(CGRect)painted
+{
+    // Create a new offscreen buffer that will be the UIImageView's image
+    CGRect bounds = self.largeImage.bounds;
+    UIGraphicsBeginImageContextWithOptions(bounds.size, NO, self.largeImage.contentScaleFactor);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // Copy the previous background into that buffer.  Calling CALayer's renderInContext: will redraw the view if necessary
+    CGContextSetBlendMode(context, kCGBlendModeCopy);
+    [self.largeImage.layer renderInContext:context];
+    
+    // Now copy the painted contect from the paint view into our background image
+    // and clear the paint view.  as an optimization we set the clip area so that we only copy the area of paint view
+    // that was actually painted
+    CGContextClipToRect(context, painted);
+    CGContextSetBlendMode(context, kCGBlendModeNormal);
+    [self.paintView.layer renderInContext:context];
+    [self.paintView erase];
+    
+    // Create UIImage from the context
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    self.largeImage.image = image;
+    UIGraphicsEndImageContext();
+    
+}
+-(void)saveImageToPhotoLibrary:(UIImage*)image
+{
+    // Save the image to the photolibrary
+    NSData *data = UIImagePNGRepresentation(image);
+    UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:data], nil, nil, nil);
+
+    // Save the image to the photolibrary in the background
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSData *data = UIImagePNGRepresentation(image);
+        UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:data], nil, nil, nil);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"\n>>>>> Done saving in background...");//update UI here
+        });
+    });
 }
 
 @end
