@@ -18,12 +18,11 @@
 @property(nonatomic, strong) FlickrPhoto *flickrPhoto;
 @property (weak, nonatomic) IBOutlet UIImageView *largeImage;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterPreviewCollectionView;
-
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *doneButton;
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBar;
 @property (weak, nonatomic) IBOutlet UILabel *attributedStringLabel;
+@property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 
 - (IBAction)cancelButtonPressed:(id)sender;
 - (IBAction)doneButtonPressed:(id)sender;

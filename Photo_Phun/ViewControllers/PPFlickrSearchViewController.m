@@ -102,6 +102,13 @@
 
     self.currentSearchTerm = [self stringByTrimmingTrailingWhitespaceAndNewlineCharacters: textField.text];
     
+    //if search string is empty, call showUIAlert with nil param, which will be interpreted properly in the method body
+    if (self.currentSearchTerm.length==0){
+        [self showUIAlert:nil];
+        return NO;
+    }
+    
+    
     [[PPDataFetcher sharedInstance] beginQuery:self.currentSearchTerm];
     
     [textField resignFirstResponder];
@@ -119,11 +126,6 @@
     
     //NSLog(@"Print data from cache: %@", self.searchResults);
     
-    /*TODO: why aren't these methods getting called here?:
-    self.collectionView.hidden = NO;
-    [self.activityIndicator stopAnimating];
-    */
-    
     //load collectionview data
     [self.collectionView reloadData];
     
@@ -134,9 +136,15 @@
     
     NSString* alertMessage;
     
-    if ([notif.name isEqualToString:@"CouldNotConnectToFeed"]) alertMessage = @"Could not connect to the Flickr.\nPlease check internet connection.";
+    if(notif==nil)
+        alertMessage = @"You need to enter a search term!";
     
-    else if([notif.name isEqualToString:@"NoDataInFeed"]) alertMessage = [NSString stringWithFormat:@"No app results for \"%@\"!", self.currentSearchTerm];
+    else if([notif.name isEqualToString:@"CouldNotConnectToFeed"])
+        alertMessage = @"Could not connect to the Flickr.\nPlease check internet connection.";
+    
+    else if([notif.name isEqualToString:@"NoDataInFeed"])
+        alertMessage = [NSString stringWithFormat:@"No app results for \"%@\"!", self.currentSearchTerm];
+
     
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:nil message:alertMessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
     

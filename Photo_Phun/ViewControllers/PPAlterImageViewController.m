@@ -10,6 +10,7 @@
 #import "FlickrPhoto.h"
 #import "PPDataFetcher.h"
 #import "PPFilterPreviewCell.h"
+#import "PPSaveOptions.h"
 
 static CGFloat kImageViewSize = 560.0;
 
@@ -25,6 +26,7 @@ static CGFloat kImageViewSize = 560.0;
 
 @property BOOL shouldMerge;
 @property (strong, nonatomic) PPPaintView *paintView;
+@property (strong, nonatomic) UIView *blackBottomFrame;
 
 @property (strong, nonatomic) NSMutableAttributedString *onDrawString;
 @property (strong, nonatomic) NSMutableAttributedString *offDrawString;
@@ -47,26 +49,29 @@ static CGFloat kImageViewSize = 560.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self.filterPreviewCollectionView setHidden:YES]; //hide filter options until image is loaded
-    self.doneButton.enabled = NO; //hack way of hiding done button until picture properly loads
+    self.doneButton.enabled = NO; //disable done button until picture properly loads
     [self configureImageViewBorder:10.0];
-    [self.activityIndicator startAnimating];
     self.context = [CIContext contextWithOptions:nil];
     
     self.filterPreviewsInfo = [NSArray arrayWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"filterPreviewsTemplate" withExtension:@"plist"]];
     
-    self.shouldMerge = YES;
+    self.shouldMerge = YES; //for drawing functionality
 }
 
 //Choosing to freeze the filter controls until the high quality image loads
 -(void)viewDidAppear:(BOOL)animated
 {
+    [self createBlackBottomFrame];
+    
     if(self.flickrPhoto.largeImage) {
 
         self.largeImage.image = self.flickrPhoto.largeImage;
-        [self.activityIndicator stopAnimating];
         [self.filterPreviewCollectionView setHidden:NO];
         self.doneButton.enabled = YES;
+        [self.activityIndicator removeFromSuperview];
+        self.activityIndicator = nil;
     }
     else {
         
@@ -75,18 +80,19 @@ static CGFloat kImageViewSize = 560.0;
         [PPDataFetcher loadImageForPhoto:self.flickrPhoto thumbnail:NO completionBlock:^(UIImage *photoImage, NSError *error) {
             if(!error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.activityIndicator stopAnimating];
                     [self.filterPreviewCollectionView setHidden:NO];
+                    [self.filterPreviewCollectionView setNeedsDisplay];
                     
                     self.flickrPhoto.largeImage = [self resizeImageToView:photoImage];
                     self.largeImage.image = self.flickrPhoto.largeImage;
-                    
-                    self.doneButton.enabled = YES; 
-                    [self.filterPreviewCollectionView setNeedsDisplay];
+                    self.doneButton.enabled = YES;
+                    [self.activityIndicator removeFromSuperview];
+                    self.activityIndicator = nil;
                 });
             }
-            else self.largeImage.image = [UIImage imageNamed:@"image_download_error"];
-            [self.activityIndicator stopAnimating];
+            else{
+                self.largeImage.image = [UIImage imageNamed:@"image_download_error"];
+            }
         }];
     }
     
@@ -96,6 +102,29 @@ static CGFloat kImageViewSize = 560.0;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)createBlackBottomFrame
+{
+    CGFloat x = self.filterPreviewCollectionView.frame.origin.x;
+    CGFloat y = self.filterPreviewCollectionView.frame.origin.y;
+    CGFloat width = self.filterPreviewCollectionView.frame.size.width;
+    CGFloat height = self.filterPreviewCollectionView.frame.size.height;
+    
+    CGRect collectionViewFrame = CGRectMake(x, y, width, height);
+    self.blackBottomFrame = [[UIView alloc] initWithFrame:collectionViewFrame];
+    self.blackBottomFrame.userInteractionEnabled = NO;
+    self.blackBottomFrame.backgroundColor = [UIColor blackColor];
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite];
+    self.activityIndicator.center = CGPointMake(150.0, y+(height/2));
+    
+    [self.view addSubview:self.activityIndicator];
+    [self.view sendSubviewToBack:self.activityIndicator];
+    [self.view addSubview:self.blackBottomFrame];
+    [self.view sendSubviewToBack:self.blackBottomFrame];
+    
+    [self.activityIndicator startAnimating];
 }
 
 #pragma mark - Image Manipulation methods
@@ -276,7 +305,6 @@ static CGFloat kImageViewSize = 560.0;
 
 -(void)buildFilters
 {
-    [self.activityIndicator stopAnimating];
     //MAKE SURE FILTER NAMES MATCH THE NAMES IN THE PLIST TEMPLATE
     
     self.beginImage = [[CIImage alloc] initWithImage:self.largeImage.image];
@@ -376,17 +404,18 @@ static CGFloat kImageViewSize = 560.0;
 
 - (IBAction)doneButtonPressed:(id)sender {
     
-    if([self.doneButton.title isEqualToString:@"Done"]) {
+    if([self.doneButton.title isEqualToString:@"Draw"]) {
         NSLog(@"done button pressed");
         self.navigationBar.title = @"Deface Photo";
         self.doneButton.title = @"Save";
         
         //remove filter options
-        [UIView animateWithDuration:0.8 animations:^{
+        [UIView animateWithDuration:0.9 animations:^{
             self.filterPreviewCollectionView.alpha = 0.0;
-            self.filterPreviewCollectionView.center = CGPointMake(160, 480);
+            self.filterPreviewCollectionView.center = CGPointMake(160, 490);
         } completion:^(BOOL finished) {
             [self.filterPreviewCollectionView removeFromSuperview];
+            self.filterPreviewCollectionView = nil;
         }];
         
         //show paintview
@@ -395,6 +424,9 @@ static CGFloat kImageViewSize = 560.0;
         self.paintView.delegate = self;
         [self.largeImage addSubview:self.paintView];
         
+        //allow touches on imageView
+        self.largeImage.userInteractionEnabled = YES;
+        
         //start blinking text
         [self buildAttributedStrings];
         NSTimer *blinkTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval)1.0 target:self selector:@selector(blink:) userInfo:nil repeats:YES];
@@ -402,12 +434,35 @@ static CGFloat kImageViewSize = 560.0;
         self.blinkStatus = YES;
         
     }
-    else{
+    else if([self.doneButton.title isEqualToString:@"Save"]){
         NSLog(@"save button pressed");
-        [self saveImageToPhotoLibrary:self.largeImage.image];
+        self.navigationBar.title = @"Save Photo";
+        self.doneButton.title = @"Done";
+        
+        [self.paintView removeFromSuperview];
+        self.paintView = nil;
+        
+        [self.attributedStringLabel removeFromSuperview];
+        self.attributedStringLabel = nil;
+        
+        PPSaveOptions *saveOptions = [[[NSBundle mainBundle] loadNibNamed:@"PPSaveOptions" owner:self options:nil] objectAtIndex:0];
+        saveOptions.image = self.largeImage.image;
+        saveOptions.center = CGPointMake(self.blackBottomFrame.center.x, self.blackBottomFrame.center.y+self.blackBottomFrame.frame.size.height);
+        [self.view addSubview:saveOptions];
+        
+        [UIView animateWithDuration:0.9 animations:^{
+            saveOptions.center = CGPointMake(self.blackBottomFrame.center.x, self.blackBottomFrame.center.y);
+        }];
+        
+        //[self saveImageToPhotoLibrary:self.largeImage.image];
         //TODO: prompt user to ask if ok to save in photo directory
         //TODO: save photo to NSUserDefaults
         //TODO: figure out how you want to transition to a "share photo" prompt
+    }
+    //btn says "Done"
+    else{
+        //TODO: make search vc a delegate for this VC
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
     }
 
 }
@@ -420,8 +475,7 @@ static CGFloat kImageViewSize = 560.0;
     UIColor *_red=[UIColor redColor];
     UIFont *font=[UIFont fontWithName:@"Helvetica-Bold" size:30.0f];
 
-    //TODO: center the text
-    
+    //TODO: center the text    
     [self.onDrawString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, _stringLength)];
     [self.onDrawString addAttribute:NSStrokeColorAttributeName value:_red range:NSMakeRange(0, _stringLength)];
     [self.onDrawString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat:-3.0] range:NSMakeRange(0, _stringLength)];
@@ -487,22 +541,6 @@ static CGFloat kImageViewSize = 560.0;
     self.largeImage.image = image;
     UIGraphicsEndImageContext();
     
-}
--(void)saveImageToPhotoLibrary:(UIImage*)image
-{
-    // Save the image to the photolibrary
-    NSData *data = UIImagePNGRepresentation(image);
-    UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:data], nil, nil, nil);
-
-    // Save the image to the photolibrary in the background
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSData *data = UIImagePNGRepresentation(image);
-        UIImageWriteToSavedPhotosAlbum([UIImage imageWithData:data], nil, nil, nil);
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"\n>>>>> Done saving in background...");//update UI here
-        });
-    });
 }
 
 @end
