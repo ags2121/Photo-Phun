@@ -107,6 +107,10 @@
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
+    if (buttonIndex==0) {
+        self.flickrBtn.enabled = YES;
+    }
+    
     if (buttonIndex==1) { // yes answer
         
         // did the alert responded to is the one prompting about user name? if so, upload!
@@ -136,14 +140,9 @@
                    [tmp show];
 
                }
-               
-
            }];
-            
         }
-        
     }
-    
 }
 
 
