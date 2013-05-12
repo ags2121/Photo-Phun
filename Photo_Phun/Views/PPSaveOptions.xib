@@ -31,15 +31,15 @@
 				<string key="IBProxiedObjectIdentifier">IBFirstResponder</string>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
-			<object class="IBUIView" id="184913169">
+			<object class="IBUIView" id="595695222">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">301</int>
 				<array class="NSMutableArray" key="NSSubviews">
-					<object class="IBUIButton" id="1042149549">
-						<reference key="NSNextResponder" ref="184913169"/>
+					<object class="IBUIButton" id="189945574">
+						<reference key="NSNextResponder" ref="595695222"/>
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{240, 18}, {60, 60}}</string>
-						<reference key="NSSuperview" ref="184913169"/>
+						<reference key="NSSuperview" ref="595695222"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -49,7 +49,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<object class="NSColor" key="IBUIHighlightedTitleColor" id="1032066505">
+						<object class="NSColor" key="IBUIHighlightedTitleColor" id="260183719">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
 						</object>
@@ -57,31 +57,31 @@
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MC4xOTYwNzg0MzE0IDAuMzA5ODAzOTIxNiAwLjUyMTU2ODYyNzUAA</bytes>
 						</object>
-						<object class="NSColor" key="IBUINormalTitleShadowColor" id="803031684">
+						<object class="NSColor" key="IBUINormalTitleShadowColor" id="183750146">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MC41AA</bytes>
 						</object>
 						<object class="NSCustomResource" key="IBUINormalImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">FlickrIcon@2x.png</string>
+							<string key="NSResourceName">FBIcon@2x.png</string>
 						</object>
-						<object class="IBUIFontDescription" key="IBUIFontDescription" id="450306318">
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="546253867">
 							<int key="type">2</int>
 							<int key="size">2</int>
 						</object>
-						<object class="NSFont" key="IBUIFont" id="739410815">
+						<object class="NSFont" key="IBUIFont" id="24266478">
 							<string key="NSName">Helvetica-Bold</string>
 							<double key="NSSize">18</double>
 							<int key="NSfFlags">16</int>
 						</object>
 					</object>
-					<object class="IBUIButton" id="667994175">
-						<reference key="NSNextResponder" ref="184913169"/>
+					<object class="IBUIButton" id="446768419">
+						<reference key="NSNextResponder" ref="595695222"/>
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{20, 18}, {60, 60}}</string>
-						<reference key="NSSuperview" ref="184913169"/>
+						<reference key="NSSuperview" ref="595695222"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="1042149549"/>
+						<reference key="NSNextKeyView" ref="189945574"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIAutoresizesSubviews">NO</bool>
@@ -89,24 +89,24 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<reference key="IBUIHighlightedTitleColor" ref="1032066505"/>
+						<reference key="IBUIHighlightedTitleColor" ref="260183719"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MC4xOTYwNzg0MzE0IDAuMzA5ODAzOTIxNiAwLjUyMTU2ODYyNzUAA</bytes>
 						</object>
-						<reference key="IBUINormalTitleShadowColor" ref="803031684"/>
+						<reference key="IBUINormalTitleShadowColor" ref="183750146"/>
 						<object class="NSCustomResource" key="IBUINormalImage">
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">SaveDiskIcon@2x.png</string>
 						</object>
-						<reference key="IBUIFontDescription" ref="450306318"/>
-						<reference key="IBUIFont" ref="739410815"/>
+						<reference key="IBUIFontDescription" ref="546253867"/>
+						<reference key="IBUIFont" ref="24266478"/>
 					</object>
 				</array>
 				<string key="NSFrameSize">{320, 95}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView" ref="667994175"/>
+				<reference key="NSNextKeyView" ref="446768419"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
@@ -126,24 +126,24 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">flickrBtn</string>
-						<reference key="source" ref="184913169"/>
-						<reference key="destination" ref="1042149549"/>
+						<reference key="source" ref="595695222"/>
+						<reference key="destination" ref="189945574"/>
 					</object>
 					<int key="connectionID">67</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">saveBtn</string>
-						<reference key="source" ref="184913169"/>
-						<reference key="destination" ref="667994175"/>
+						<reference key="source" ref="595695222"/>
+						<reference key="destination" ref="446768419"/>
 					</object>
 					<int key="connectionID">68</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">flickrButtonPressed:</string>
-						<reference key="source" ref="1042149549"/>
-						<reference key="destination" ref="184913169"/>
+						<reference key="source" ref="189945574"/>
+						<reference key="destination" ref="595695222"/>
 						<int key="IBEventType">7</int>
 					</object>
 					<int key="connectionID">63</int>
@@ -151,8 +151,8 @@
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">saveToLibraryButtonPressed:</string>
-						<reference key="source" ref="667994175"/>
-						<reference key="destination" ref="184913169"/>
+						<reference key="source" ref="446768419"/>
+						<reference key="destination" ref="595695222"/>
 						<int key="IBEventType">7</int>
 					</object>
 					<int key="connectionID">65</int>
@@ -179,24 +179,24 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">3</int>
-						<reference key="object" ref="184913169"/>
+						<reference key="object" ref="595695222"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="1042149549"/>
-							<reference ref="667994175"/>
+							<reference ref="189945574"/>
+							<reference ref="446768419"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">17</int>
-						<reference key="object" ref="1042149549"/>
+						<reference key="object" ref="189945574"/>
 						<array class="NSMutableArray" key="children"/>
-						<reference key="parent" ref="184913169"/>
+						<reference key="parent" ref="595695222"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">56</int>
-						<reference key="object" ref="667994175"/>
+						<reference key="object" ref="446768419"/>
 						<array class="NSMutableArray" key="children"/>
-						<reference key="parent" ref="184913169"/>
+						<reference key="parent" ref="595695222"/>
 					</object>
 				</array>
 			</object>
@@ -260,7 +260,7 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="FlickrIcon@2x.png">{120, 120}</string>
+			<string key="FBIcon@2x.png">{120, 120}</string>
 			<string key="SaveDiskIcon@2x.png">{442, 442}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">2083</string>

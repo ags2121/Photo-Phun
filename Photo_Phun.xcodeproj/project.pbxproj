@@ -10,7 +10,6 @@
 		A9349652173DB5A800A4C0CB /* PPPaintView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9349651173DB5A800A4C0CB /* PPPaintView.m */; };
 		A9349654173EFD8500A4C0CB /* PPSaveOptions.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9349653173EFD8500A4C0CB /* PPSaveOptions.xib */; };
 		A9349656173EFE8200A4C0CB /* 37-suitcase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9349655173EFE8200A4C0CB /* 37-suitcase@2x.png */; };
-		A9349658173EFFF300A4C0CB /* FlickrIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9349657173EFFF300A4C0CB /* FlickrIcon@2x.png */; };
 		A934965A173F008D00A4C0CB /* SaveDiskIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9349659173F008D00A4C0CB /* SaveDiskIcon@2x.png */; };
 		A934965D173F01AE00A4C0CB /* PPSaveOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = A934965C173F01AE00A4C0CB /* PPSaveOptions.m */; };
 		A934966D173F187600A4C0CB /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A934966C173F187600A4C0CB /* CFNetwork.framework */; };
@@ -22,6 +21,7 @@
 		A934967F173F1D6000A4C0CB /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A934967E173F1D5F00A4C0CB /* Social.framework */; };
 		A9349681173F1D6800A4C0CB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9349680173F1D6800A4C0CB /* Security.framework */; };
 		A9349683173F1D8D00A4C0CB /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A9349682173F1D8D00A4C0CB /* libsqlite3.dylib */; };
+		A9349689173F253300A4C0CB /* FBIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9349688173F253200A4C0CB /* FBIcon@2x.png */; };
 		A98A4F70173A100D0017FF44 /* bar_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A4F6F173A100D0017FF44 /* bar_button@2x.png */; };
 		A98A4F72173A1D2C0017FF44 /* bar_button_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A4F71173A1D2C0017FF44 /* bar_button_selected@2x.png */; };
 		A98A8024173B13B20046D64C /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A98A8023173B13B20046D64C /* CoreImage.framework */; };
@@ -85,7 +85,6 @@
 		A9349651173DB5A800A4C0CB /* PPPaintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPPaintView.m; path = Views/PPPaintView.m; sourceTree = "<group>"; };
 		A9349653173EFD8500A4C0CB /* PPSaveOptions.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PPSaveOptions.xib; path = Views/PPSaveOptions.xib; sourceTree = "<group>"; };
 		A9349655173EFE8200A4C0CB /* 37-suitcase@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "37-suitcase@2x.png"; sourceTree = "<group>"; };
-		A9349657173EFFF300A4C0CB /* FlickrIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlickrIcon@2x.png"; sourceTree = "<group>"; };
 		A9349659173F008D00A4C0CB /* SaveDiskIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SaveDiskIcon@2x.png"; sourceTree = "<group>"; };
 		A934965B173F01AE00A4C0CB /* PPSaveOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPSaveOptions.h; path = Views/PPSaveOptions.h; sourceTree = "<group>"; };
 		A934965C173F01AE00A4C0CB /* PPSaveOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPSaveOptions.m; path = Views/PPSaveOptions.m; sourceTree = "<group>"; };
@@ -98,6 +97,7 @@
 		A934967E173F1D5F00A4C0CB /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		A9349680173F1D6800A4C0CB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A9349682173F1D8D00A4C0CB /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		A9349688173F253200A4C0CB /* FBIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FBIcon@2x.png"; sourceTree = "<group>"; };
 		A98A4F6F173A100D0017FF44 /* bar_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar_button@2x.png"; sourceTree = "<group>"; };
 		A98A4F71173A1D2C0017FF44 /* bar_button_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar_button_selected@2x.png"; sourceTree = "<group>"; };
 		A98A8023173B13B20046D64C /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
@@ -247,8 +247,8 @@
 			isa = PBXGroup;
 			children = (
 				A9C3734117373488006CFFBE /* PPAppDelegate.h */,
-				A9C3734217373488006CFFBE /* PPAppDelegate.m */,
 				A9C3734A17373488006CFFBE /* MainStoryboard.storyboard */,
+				A9C3734217373488006CFFBE /* PPAppDelegate.m */,
 				A9C373DC1738B424006CFFBE /* Views */,
 				A9C3737D173819B1006CFFBE /* ViewControllers */,
 				A9C373651737484A006CFFBE /* Model */,
@@ -310,7 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				A9349659173F008D00A4C0CB /* SaveDiskIcon@2x.png */,
-				A9349657173EFFF300A4C0CB /* FlickrIcon@2x.png */,
+				A9349688173F253200A4C0CB /* FBIcon@2x.png */,
 				A9349655173EFE8200A4C0CB /* 37-suitcase@2x.png */,
 				A98A8025173C32420046D64C /* image_download_error@2x.png */,
 				A98A8041173CB1610046D64C /* Lighten@2x.png */,
@@ -473,9 +473,9 @@
 				A98A8050173CB1610046D64C /* Sepia@2x.png in Resources */,
 				A9349654173EFD8500A4C0CB /* PPSaveOptions.xib in Resources */,
 				A9349656173EFE8200A4C0CB /* 37-suitcase@2x.png in Resources */,
-				A9349658173EFFF300A4C0CB /* FlickrIcon@2x.png in Resources */,
 				A934965A173F008D00A4C0CB /* SaveDiskIcon@2x.png in Resources */,
 				A9349679173F1CED00A4C0CB /* FacebookSDKResources.bundle in Resources */,
+				A9349689173F253300A4C0CB /* FBIcon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,6 +604,7 @@
 					"root>/Source",
 				);
 				INFOPLIST_FILE = "Photo_Phun/Photo_Phun-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3.0";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -623,6 +624,7 @@
 					"root>/Source",
 				);
 				INFOPLIST_FILE = "Photo_Phun/Photo_Phun-Info.plist";
+				OTHER_LDFLAGS = "-lsqlite3.0";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

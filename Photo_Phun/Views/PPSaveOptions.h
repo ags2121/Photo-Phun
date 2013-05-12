@@ -17,6 +17,6 @@
 @property (weak, nonatomic) UIImage *image;
 
 -(void)saveImageToPhotoLibrary:(UIImage*)image;
--(void)saveImageToFlickr:(UIImage*)image;
+-(void)saveImageToFacebook:(UIImage*)image;
 
 @end

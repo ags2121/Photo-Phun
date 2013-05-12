@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "PPSideMenuController.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface PPAppDelegate : UIResponder <UIApplicationDelegate, PaperFoldMenuControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong) PPSideMenuController *smc;
+@property (strong, nonatomic) FBSession *session;
 
 @end
