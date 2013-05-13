@@ -11,6 +11,14 @@
 #import "PPAlterImageViewController.h"
 #import "PPShowPhotosViewController.h"
 
+NSString *const kCompletedFirstLaunch = @"Did complete first Launch";
+NSString *const kLaunchDate = @"launch date";
+NSString *const kDontShowSaveAlert = @"save alert";
+NSString *const kSavedPhotos = @"saved photos";
+NSString *const kDateKey = @"date key";
+NSString *const kImageKey = @"image key";
+NSString *const kThumbnailImageKey = @"thumbnail key";
+
 @implementation PPAppDelegate
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -49,6 +57,7 @@
     [_smc setViewControllers:viewControllers];
     
     [self setAppearanceProxies];
+    [self setPreferenceDefaults];
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -97,9 +106,34 @@
                                                            [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
                                                            UITextAttributeTextShadowOffset, nil]];
     
-//    
-//    [[UIBarButtonItem appearance] setBackgroundImage:[UIImage imageNamed:@"bar_button"] forState: UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [[UIBarButtonItem appearance] setTintColor:[UIColor colorWithPatternImage: [UIImage imageNamed:@"bar_button"]]];
 }
+
+- (void)setPreferenceDefaults
+{
+    //use NSFileManager to retrieve plist of user preferences, located in documents directory
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"UserDefaults.plist"];
+    
+    //if file doesn't exist, create it
+    if( ![fileManager fileExistsAtPath: path] ){
+        
+        //get current date
+        NSDate *launchDate = [NSDate date];
+        
+        //add date, first launch boolean (NO), and save alert boolean (NO) to NSDictionary
+        NSDictionary *newAppDefaults = @{ kCompletedFirstLaunch : @0, kDontShowSaveAlert : @0, kLaunchDate : launchDate, kSavedPhotos : @[]};
+        [newAppDefaults writeToFile:path atomically:YES];
+    }
+    
+    //load file and use it to register user defaults
+    NSDictionary *appDefaults = [[NSDictionary alloc] initWithContentsOfFile:path];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    
+    //NSLog(@"NSUserDefaults at launch: %@", [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
+}
+
 
 @end

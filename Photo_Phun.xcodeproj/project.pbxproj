@@ -34,6 +34,7 @@
 		A98A804E173CB1610046D64C /* Bump@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A8046173CB1610046D64C /* Bump@2x.png */; };
 		A98A804F173CB1610046D64C /* Original@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A8047173CB1610046D64C /* Original@2x.png */; };
 		A98A8050173CB1610046D64C /* Sepia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A98A8048173CB1610046D64C /* Sepia@2x.png */; };
+		A99EEF3F174047FA00131672 /* noSavedImages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A99EEF3E174047FA00131672 /* noSavedImages@2x.png */; };
 		A9C3733317373488006CFFBE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C3733217373488006CFFBE /* UIKit.framework */; };
 		A9C3733517373488006CFFBE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C3733417373488006CFFBE /* Foundation.framework */; };
 		A9C3733717373488006CFFBE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9C3733617373488006CFFBE /* CoreGraphics.framework */; };
@@ -110,6 +111,7 @@
 		A98A8046173CB1610046D64C /* Bump@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bump@2x.png"; sourceTree = "<group>"; };
 		A98A8047173CB1610046D64C /* Original@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Original@2x.png"; sourceTree = "<group>"; };
 		A98A8048173CB1610046D64C /* Sepia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sepia@2x.png"; sourceTree = "<group>"; };
+		A99EEF3E174047FA00131672 /* noSavedImages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noSavedImages@2x.png"; sourceTree = "<group>"; };
 		A9C3732F17373488006CFFBE /* Photo_Phun.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Photo_Phun.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9C3733217373488006CFFBE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		A9C3733417373488006CFFBE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -247,8 +249,8 @@
 			isa = PBXGroup;
 			children = (
 				A9C3734117373488006CFFBE /* PPAppDelegate.h */,
-				A9C3734A17373488006CFFBE /* MainStoryboard.storyboard */,
 				A9C3734217373488006CFFBE /* PPAppDelegate.m */,
+				A9C3734A17373488006CFFBE /* MainStoryboard.storyboard */,
 				A9C373DC1738B424006CFFBE /* Views */,
 				A9C3737D173819B1006CFFBE /* ViewControllers */,
 				A9C373651737484A006CFFBE /* Model */,
@@ -309,6 +311,7 @@
 		A9C373A2173844A7006CFFBE /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A99EEF3E174047FA00131672 /* noSavedImages@2x.png */,
 				A9349659173F008D00A4C0CB /* SaveDiskIcon@2x.png */,
 				A9349688173F253200A4C0CB /* FBIcon@2x.png */,
 				A9349655173EFE8200A4C0CB /* 37-suitcase@2x.png */,
@@ -476,6 +479,7 @@
 				A934965A173F008D00A4C0CB /* SaveDiskIcon@2x.png in Resources */,
 				A9349679173F1CED00A4C0CB /* FacebookSDKResources.bundle in Resources */,
 				A9349689173F253300A4C0CB /* FBIcon@2x.png in Resources */,
+				A99EEF3F174047FA00131672 /* noSavedImages@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

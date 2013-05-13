@@ -10,6 +10,9 @@
 
 @interface PPShowPhotosViewController : UIViewController<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
 
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+
+@property (weak, nonatomic) IBOutlet UICollectionView *thumbnailView;
+@property (weak, nonatomic) IBOutlet UIImageView *largeImage;
+@property (weak, nonatomic) IBOutlet UILabel *attributedStringLabel;
 
 @end

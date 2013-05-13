@@ -9,44 +9,85 @@
             <objects>
                 <viewController storyboardIdentifier="PPShowPhotosViewController" id="xCX-9M-hcD" customClass="PPShowPhotosViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dd5-5O-Ggm">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="1lm-df-Xkz">
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="BQt-5t-l77">
-                                    <size key="itemSize" width="50" height="50"/>
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="k1g-Li-MOr">
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="95" type="user" id="sgy-5G-07q"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="20" minimumInteritemSpacing="10" id="ZHO-iK-FMY">
+                                    <size key="itemSize" width="70" height="70"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="20" minY="10" maxX="20" maxY="10"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="o3e-Gb-4Ti">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" reuseIdentifier="PPFilterPreviewCell" id="MeF-cQ-ipD" customClass="PPFilterPreviewCell">
+                                        <rect key="frame" x="20" y="12" width="70" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2hk-og-aSO">
+                                                    <gestureRecognizers/>
+                                                </imageView>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstItem="2hk-og-aSO" firstAttribute="top" secondItem="MeF-cQ-ipD" secondAttribute="top" type="default" id="FBC-YN-Yg6"/>
+                                            <constraint firstItem="2hk-og-aSO" firstAttribute="trailing" secondItem="MeF-cQ-ipD" secondAttribute="trailing" type="default" id="TpV-mf-qn6"/>
+                                            <constraint firstItem="2hk-og-aSO" firstAttribute="leading" secondItem="MeF-cQ-ipD" secondAttribute="leading" type="default" id="rzg-YN-g1o"/>
+                                            <constraint firstItem="2hk-og-aSO" firstAttribute="bottom" secondItem="MeF-cQ-ipD" secondAttribute="bottom" type="default" id="vb5-2H-Kpc"/>
+                                        </constraints>
+                                        <size key="customSize" width="70" height="70"/>
+                                        <connections>
+                                            <outlet property="previewImage" destination="2hk-og-aSO" id="CUl-ka-0Ss"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
-                                    <outlet property="dataSource" destination="xCX-9M-hcD" id="Y5m-vU-1Zy"/>
-                                    <outlet property="delegate" destination="xCX-9M-hcD" id="Wwm-an-AwZ"/>
+                                    <outlet property="dataSource" destination="xCX-9M-hcD" id="7Z2-GW-IJp"/>
+                                    <outlet property="delegate" destination="xCX-9M-hcD" id="TAH-cr-S3K"/>
                                 </connections>
                             </collectionView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KmA-dh-DSz">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="180" id="ZIT-f2-Pfz"/>
+                                    <constraint firstAttribute="height" constant="54" id="gRb-My-ci4"/>
+                                </constraints>
+                                <attributedString key="attributedText"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="7jO-6L-JyX">
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="280" type="user" id="Whh-Hf-57D"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="1lm-df-Xkz" firstAttribute="trailing" secondItem="Dd5-5O-Ggm" secondAttribute="trailing" type="default" id="3k5-7R-wxe"/>
-                            <constraint firstItem="1lm-df-Xkz" firstAttribute="leading" secondItem="Dd5-5O-Ggm" secondAttribute="leading" type="default" id="D0P-1z-ubP"/>
-                            <constraint firstItem="1lm-df-Xkz" firstAttribute="bottom" secondItem="Dd5-5O-Ggm" secondAttribute="bottom" type="default" id="gPe-yd-TTJ"/>
-                            <constraint firstItem="1lm-df-Xkz" firstAttribute="top" secondItem="Dd5-5O-Ggm" secondAttribute="top" type="default" id="hlR-NE-qoH"/>
+                            <constraint firstItem="7jO-6L-JyX" firstAttribute="top" secondItem="Dd5-5O-Ggm" secondAttribute="top" constant="20" type="user" id="Egn-Yz-5tF"/>
+                            <constraint firstItem="k1g-Li-MOr" firstAttribute="leading" secondItem="Dd5-5O-Ggm" secondAttribute="leading" type="default" id="Fif-CI-t79"/>
+                            <constraint firstItem="k1g-Li-MOr" firstAttribute="trailing" secondItem="Dd5-5O-Ggm" secondAttribute="trailing" type="default" id="WPA-YI-fqV"/>
+                            <constraint firstAttribute="bottom" secondItem="KmA-dh-DSz" secondAttribute="bottom" constant="20" type="user" id="jI8-bi-dHB"/>
+                            <constraint firstAttribute="trailing" secondItem="7jO-6L-JyX" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="k5F-gX-6u5"/>
+                            <constraint firstItem="7jO-6L-JyX" firstAttribute="leading" secondItem="Dd5-5O-Ggm" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="oFF-9b-yEg"/>
+                            <constraint firstItem="k1g-Li-MOr" firstAttribute="bottom" secondItem="Dd5-5O-Ggm" secondAttribute="bottom" type="default" id="t15-OV-ERq"/>
+                            <constraint firstItem="KmA-dh-DSz" firstAttribute="leading" secondItem="Dd5-5O-Ggm" secondAttribute="leading" constant="75" type="user" id="zD5-Oo-EJB"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
                     <connections>
-                        <outlet property="collectionView" destination="1lm-df-Xkz" id="QoE-HJ-4Ny"/>
+                        <outlet property="attributedStringLabel" destination="KmA-dh-DSz" id="hbc-UW-aRM"/>
+                        <outlet property="largeImage" destination="7jO-6L-JyX" id="OFn-sD-hVI"/>
+                        <outlet property="thumbnailView" destination="k1g-Li-MOr" id="xXa-jE-yKY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VDg-Tk-xVN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -58,7 +99,7 @@
             <objects>
                 <viewController storyboardIdentifier="PPAlterImageViewController" id="sRQ-yU-ig9" customClass="PPAlterImageViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="maa-Qp-qE8">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UQw-i9-fYt">
@@ -146,7 +187,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="3SA-GL-YKL" firstAttribute="trailing" secondItem="maa-Qp-qE8" secondAttribute="trailing" type="default" id="0FM-Lb-fqj"/>
-                            <constraint firstAttribute="bottom" secondItem="UQw-i9-fYt" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="2aX-Xx-m5C"/>
+                            <constraint firstAttribute="bottom" secondItem="UQw-i9-fYt" secondAttribute="bottom" constant="20" symbolic="YES" type="user" id="2aX-Xx-m5C"/>
                             <constraint firstItem="XUH-V3-ckj" firstAttribute="top" secondItem="7do-rN-TPz" secondAttribute="bottom" priority="1" constant="8" symbolic="YES" type="user" id="D3r-4k-rqH"/>
                             <constraint firstItem="7do-rN-TPz" firstAttribute="top" secondItem="maa-Qp-qE8" secondAttribute="top" constant="67" type="user" id="D7P-S9-1Vj"/>
                             <constraint firstItem="UQw-i9-fYt" firstAttribute="leading" secondItem="maa-Qp-qE8" secondAttribute="leading" constant="110" type="user" id="FC0-lf-KIh"/>
@@ -179,7 +220,7 @@
             <objects>
                 <viewController storyboardIdentifier="PPFlickrSearchViewController" id="2" customClass="PPFlickrSearchViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="D1a-QO-k1a">
@@ -278,9 +319,65 @@
         <image name="Scribble_Search@2x.png" width="170" height="49"/>
         <image name="divider@2x.png" width="500" height="44"/>
     </resources>
+    <classes>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="PPAlterImageViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PPAlterImageViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelButtonPressed:"/>
+                <relationship kind="action" name="doneButtonPressed:"/>
+                <relationship kind="outlet" name="attributedStringLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="doneButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="filterPreviewCollectionView" candidateClass="UICollectionView"/>
+                <relationship kind="outlet" name="largeImage" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationItem"/>
+            </relationships>
+        </class>
+        <class className="PPFilterPreviewCell" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PPFilterPreviewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="filterName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="previewImage" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="PPFlickrPhotoCell" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PPFlickrPhotoCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
+            </relationships>
+        </class>
+        <class className="PPFlickrSearchViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PPFlickrSearchViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="collectionView" candidateClass="UICollectionView"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="PPShowPhotosViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PPShowPhotosViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="attributedStringLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="largeImage" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="thumbnailView" candidateClass="UICollectionView"/>
+            </relationships>
+        </class>
+        <class className="UICollectionReusableView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
+        </class>
+        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
+        </class>
+        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>

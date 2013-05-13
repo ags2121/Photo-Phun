@@ -57,7 +57,6 @@
             [cell setBackgroundView:bgView];
             UIImageView *sBgView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cellBgSelected.png"] stretchableImageWithLeftCapWidth:20 topCapHeight:20]];
             [cell setSelectedBackgroundView:sBgView];
-            
         }
         
         UIViewController *viewController = self.viewControllers[indexPath.row];

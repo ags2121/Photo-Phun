@@ -16,4 +16,13 @@
 @property (nonatomic, strong) PPSideMenuController *smc;
 @property (strong, nonatomic) FBSession *session;
 
+extern NSString *const kCompletedFirstLaunch;
+extern NSString *const kLaunchDate;
+extern NSString *const kDontShowSaveAlert;
+extern NSString *const kSavedPhotos;
+
+extern NSString *const kImageKey;
+extern NSString *const kThumbnailImageKey;
+extern NSString *const kDateKey;
+
 @end

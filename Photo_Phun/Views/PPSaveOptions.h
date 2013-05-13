@@ -10,13 +10,11 @@
 
 @interface PPSaveOptions : UIView
 
-- (IBAction)flickrButtonPressed:(id)sender;
+- (IBAction)facebookButtonPressed:(id)sender;
 - (IBAction)saveToLibraryButtonPressed:(id)sender;
-@property (weak, nonatomic) IBOutlet UIButton *flickrBtn;
+
+@property (weak, nonatomic) IBOutlet UIButton *facebookBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 @property (weak, nonatomic) UIImage *image;
-
--(void)saveImageToPhotoLibrary:(UIImage*)image;
--(void)saveImageToFacebook:(UIImage*)image;
 
 @end

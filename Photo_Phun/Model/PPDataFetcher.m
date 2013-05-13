@@ -151,8 +151,7 @@ int const kDaysSinceCacheUpdate = 3;
                 NSLog(@"retrieving cached date after setting it %@", [self.resultsCache objectForKey:self.currentSearchTerm][kCachedDate]);
                 
                 //send message to reload search VC
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"DidLoadNewData"
-                                                                    object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"DidLoadNewData" object:nil];
             }); 
         }];
     }

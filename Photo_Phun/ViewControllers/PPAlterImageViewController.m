@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Alex Silva. All rights reserved.
 //
 
+#import "PPAppDelegate.h"
 #import "PPAlterImageViewController.h"
 #import "FlickrPhoto.h"
 #import "PPDataFetcher.h"
@@ -13,6 +14,7 @@
 #import "PPSaveOptions.h"
 
 static CGFloat kImageViewSize = 560.0;
+static CGFloat kFilterPreviewSize = 70.0;
 
 @interface PPAlterImageViewController ()
 
@@ -244,6 +246,22 @@ static CGFloat kImageViewSize = 560.0;
     return newImage;
 }
 
++ (UIImage*)scaleImage:(UIImage*)image toSize:(CGSize)size {
+    UIGraphicsBeginImageContext(size);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(context, 0.0, size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    
+    CGContextDrawImage(context, CGRectMake(0.0f, 0.0f, size.width, size.height), image.CGImage);
+    
+    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return scaledImage;
+}
+
 #pragma mark - UICollectionView Datasource
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
     
@@ -406,7 +424,7 @@ static CGFloat kImageViewSize = 560.0;
     
     if([self.doneButton.title isEqualToString:@"Draw"]) {
         NSLog(@"done button pressed");
-        self.navigationBar.title = @"Deface Photo";
+        self.navigationBar.title = @"Dephace Photo";
         self.doneButton.title = @"Save";
         
         //remove filter options
@@ -454,17 +472,42 @@ static CGFloat kImageViewSize = 560.0;
             saveOptions.center = CGPointMake(self.blackBottomFrame.center.x, self.blackBottomFrame.center.y);
         }];
         
-        //[self saveImageToPhotoLibrary:self.largeImage.image];
-        //TODO: prompt user to ask if ok to save in photo directory
-        //TODO: save photo to NSUserDefaults
-        //TODO: figure out how you want to transition to a "share photo" prompt
+        [self addNewPhotoAndSort];
     }
     //btn says "Done"
     else{
         //TODO: make search vc a delegate for this VC
         [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
     }
+}
 
+-(void)addNewPhotoAndSort
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray* savedPhotos = [[defaults arrayForKey:kSavedPhotos] mutableCopy];
+    
+    if (!savedPhotos) {
+        savedPhotos = [[NSMutableArray alloc] initWithCapacity:1];
+    }
+    
+    
+    //make thumbnail
+    UIImage *thumbnailImage = [PPAlterImageViewController scaleImage:self.largeImage.image toSize:CGSizeMake(kFilterPreviewSize, kFilterPreviewSize)];
+    NSLog(@"size of thumbnail: %@", NSStringFromCGSize(thumbnailImage.size));
+    NSData *thumbnailData = UIImagePNGRepresentation(thumbnailImage);
+    
+    //create dictionary of image info
+    NSDictionary *photoToAdd =  @{kImageKey : UIImagePNGRepresentation(self.largeImage.image), kThumbnailImageKey : thumbnailData, kDateKey : [NSDate date]};
+    [savedPhotos addObject:photoToAdd];
+    
+    //sort images
+    [savedPhotos sortUsingComparator:^NSComparisonResult(NSDictionary *photo1, NSDictionary *photo2) {
+        return [photo2[kDateKey] compare: photo1[kDateKey]];
+    }];
+    
+    //save to defaults
+    [defaults setObject:savedPhotos forKey:kSavedPhotos];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PhotoAdded" object:nil];
 }
 
 -(void)buildAttributedStrings
