@@ -98,7 +98,7 @@
     }
 }
 
--(void)ddLongPressGestureForDeleting
+-(void)addLongPressGestureForDeleting
 {
     UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc]
                                           initWithTarget:self action:@selector(handleLongPress:)];
