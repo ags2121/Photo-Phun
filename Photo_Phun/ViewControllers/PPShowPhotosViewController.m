@@ -229,8 +229,6 @@
             }
             
         }
-        
-        //[self.thumbnailView reloadData];
     }
 }
 

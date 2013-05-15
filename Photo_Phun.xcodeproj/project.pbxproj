@@ -41,9 +41,6 @@
 		A9C3733D17373488006CFFBE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9C3733B17373488006CFFBE /* InfoPlist.strings */; };
 		A9C3733F17373488006CFFBE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C3733E17373488006CFFBE /* main.m */; };
 		A9C3734317373488006CFFBE /* PPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C3734217373488006CFFBE /* PPAppDelegate.m */; };
-		A9C3734517373488006CFFBE /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = A9C3734417373488006CFFBE /* Default.png */; };
-		A9C3734717373488006CFFBE /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9C3734617373488006CFFBE /* Default@2x.png */; };
-		A9C3734917373488006CFFBE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9C3734817373488006CFFBE /* Default-568h@2x.png */; };
 		A9C3734C17373488006CFFBE /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9C3734A17373488006CFFBE /* MainStoryboard.storyboard */; };
 		A9C373631737483B006CFFBE /* PPDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C373621737483B006CFFBE /* PPDataFetcher.m */; };
 		A9C3737C173819AD006CFFBE /* PPFlickrSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C3737B173819AD006CFFBE /* PPFlickrSearchViewController.m */; };
@@ -75,6 +72,11 @@
 		A9C373D71738594C006CFFBE /* cellBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9C373D317385932006CFFBE /* cellBg@2x.png */; };
 		A9C373D81738594E006CFFBE /* cellBgSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9C373D417385932006CFFBE /* cellBgSelected@2x.png */; };
 		A9C373DB1738B41B006CFFBE /* PPFlickrPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C373DA1738B417006CFFBE /* PPFlickrPhotoCell.m */; };
+		A9D6E69B17431374006A14F1 /* Dephace@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D6E69A17431374006A14F1 /* Dephace@2x.png */; };
+		A9D6E69D1743139E006A14F1 /* Dephace.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D6E69C1743139E006A14F1 /* Dephace.png */; };
+		A9D6E6A5174316EC006A14F1 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D6E6A4174316EC006A14F1 /* Default@2x.png */; };
+		A9D6E6A7174316EF006A14F1 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D6E6A6174316EF006A14F1 /* Default-568h@2x.png */; };
+		A9D6E6A9174316F2006A14F1 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = A9D6E6A8174316F2006A14F1 /* Default.png */; };
 		A9EC4A541739BA3000527C32 /* PPAlterImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9EC4A531739BA3000527C32 /* PPAlterImageViewController.m */; };
 		A9EC4A571739C02D00527C32 /* PPShowPhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9EC4A561739C02D00527C32 /* PPShowPhotosViewController.m */; };
 		A9EC4A591739CE6300527C32 /* filterPreviewsTemplate.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9EC4A581739CE6300527C32 /* filterPreviewsTemplate.plist */; };
@@ -174,6 +176,11 @@
 		A9C373D417385932006CFFBE /* cellBgSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cellBgSelected@2x.png"; sourceTree = "<group>"; };
 		A9C373D91738B414006CFFBE /* PPFlickrPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPFlickrPhotoCell.h; path = Views/PPFlickrPhotoCell.h; sourceTree = "<group>"; };
 		A9C373DA1738B417006CFFBE /* PPFlickrPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPFlickrPhotoCell.m; path = Views/PPFlickrPhotoCell.m; sourceTree = "<group>"; };
+		A9D6E69A17431374006A14F1 /* Dephace@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Dephace@2x.png"; sourceTree = "<group>"; };
+		A9D6E69C1743139E006A14F1 /* Dephace.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dephace.png; sourceTree = "<group>"; };
+		A9D6E6A4174316EC006A14F1 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		A9D6E6A6174316EF006A14F1 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		A9D6E6A8174316F2006A14F1 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		A9EC4A521739BA3000527C32 /* PPAlterImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPAlterImageViewController.h; path = ViewControllers/PPAlterImageViewController.h; sourceTree = "<group>"; };
 		A9EC4A531739BA3000527C32 /* PPAlterImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PPAlterImageViewController.m; path = ViewControllers/PPAlterImageViewController.m; sourceTree = "<group>"; };
 		A9EC4A551739C02D00527C32 /* PPShowPhotosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPShowPhotosViewController.h; path = ViewControllers/PPShowPhotosViewController.h; sourceTree = "<group>"; };
@@ -210,6 +217,11 @@
 		A9C3732617373488006CFFBE = {
 			isa = PBXGroup;
 			children = (
+				A9D6E6A8174316F2006A14F1 /* Default.png */,
+				A9D6E6A6174316EF006A14F1 /* Default-568h@2x.png */,
+				A9D6E6A4174316EC006A14F1 /* Default@2x.png */,
+				A9D6E69C1743139E006A14F1 /* Dephace.png */,
+				A9D6E69A17431374006A14F1 /* Dephace@2x.png */,
 				A9349682173F1D8D00A4C0CB /* libsqlite3.dylib */,
 				A9C3733817373488006CFFBE /* Photo_Phun */,
 				A9C3733117373488006CFFBE /* Frameworks */,
@@ -445,9 +457,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9C3733D17373488006CFFBE /* InfoPlist.strings in Resources */,
-				A9C3734517373488006CFFBE /* Default.png in Resources */,
-				A9C3734717373488006CFFBE /* Default@2x.png in Resources */,
-				A9C3734917373488006CFFBE /* Default-568h@2x.png in Resources */,
 				A9C3734C17373488006CFFBE /* MainStoryboard.storyboard in Resources */,
 				A9C3739B173844A0006CFFBE /* divider@2x.png in Resources */,
 				A9C3739C173844A0006CFFBE /* lines@2x.png in Resources */,
@@ -480,6 +489,11 @@
 				A9349679173F1CED00A4C0CB /* FacebookSDKResources.bundle in Resources */,
 				A9349689173F253300A4C0CB /* FBIcon@2x.png in Resources */,
 				A99EEF3F174047FA00131672 /* noSavedImages@2x.png in Resources */,
+				A9D6E69B17431374006A14F1 /* Dephace@2x.png in Resources */,
+				A9D6E69D1743139E006A14F1 /* Dephace.png in Resources */,
+				A9D6E6A5174316EC006A14F1 /* Default@2x.png in Resources */,
+				A9D6E6A7174316EF006A14F1 /* Default-568h@2x.png in Resources */,
+				A9D6E6A9174316F2006A14F1 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
