@@ -40,13 +40,9 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
 	self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_cork"]];
     
-    UIImage *textFieldImage = [[UIImage imageNamed:@"search_field"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
-    [self.textField setBackground:textFieldImage];
+    [self styleTextField];
 
-    //Add Tap Gesture recognizer
-    self.tapOffOfKeyboard = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapOnCollectionView:)];
-    [self.tapOffOfKeyboard setDelegate:self];
-    [self.view addGestureRecognizer:self.tapOffOfKeyboard];
+    [self addTapGesture];
     
     [self registerNotifications];
 }
@@ -56,6 +52,24 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+-(void)styleTextField
+{
+    UIImage *textFieldImage = [[UIImage imageNamed:@"search_field"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+    [self.textField setBackground:textFieldImage];
+    
+    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 20)];
+    self.textField.leftView = paddingView;
+    self.textField.leftViewMode = UITextFieldViewModeAlways;
+}
+
+-(void)addTapGesture
+{
+    self.tapOffOfKeyboard = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapOnCollectionView:)];
+    [self.tapOffOfKeyboard setDelegate:self];
+    [self.view addGestureRecognizer:self.tapOffOfKeyboard];
+}
+
 
 -(void)registerNotifications
 {
@@ -129,6 +143,9 @@
     //load collectionview data
     [self.collectionView reloadData];
     
+    //scroll collectionview to top
+    [self.collectionView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    
 }
 
 -(void)showUIAlert:(NSNotification*)notif
@@ -161,7 +178,6 @@
     [self.activityIndicator stopAnimating];
     
     return [self.searchResults count];
-    
 }
 
 - (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
@@ -260,16 +276,5 @@
     return [self string: original ByTrimmingTrailingCharactersInSet:
             [NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
-
-/*TODO: cache for large images
-//init thumbnailCache if its nil
-if(!_thumbnailCache) _thumbnailCache = [[NSCache alloc] init];
-
-//create data structure for query, if not present
-if (! [self.thumbnailCache objectForKey:self.currentQuery] ) {
-    NSString *dictionaryPath = [[NSBundle mainBundle] pathForResource:@"imageCacheInitData" ofType:@"plist"];
-    [self.thumbnailCache setObject:[NSMutableDictionary dictionaryWithContentsOfFile:dictionaryPath] forKey:self.currentQuery];
-}
-*/
 
 @end

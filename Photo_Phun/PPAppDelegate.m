@@ -106,7 +106,7 @@ NSString *const kThumbnailImageKey = @"thumbnail key";
                                                            [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
                                                            UITextAttributeTextShadowOffset, nil]];
     
-    [[UIBarButtonItem appearance] setTintColor:[UIColor colorWithPatternImage: [UIImage imageNamed:@"bar_button"]]];
+    [[UIBarButtonItem appearance] setTintColor:[UIColor blackColor]];
 }
 
 - (void)setPreferenceDefaults

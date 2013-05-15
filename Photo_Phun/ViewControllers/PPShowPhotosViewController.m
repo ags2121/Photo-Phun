@@ -15,11 +15,13 @@
 @property (strong, nonatomic) NSMutableDictionary *usersPhotos;
 @property (strong, nonatomic) NSArray *largeImageData;
 @property (strong, nonatomic) NSArray *usersThumbnails;
-@property BOOL blinkStatus;
 @property (strong, nonatomic) NSMutableAttributedString *onDrawString;
 @property (strong, nonatomic) NSMutableAttributedString *offDrawString;
 @property (strong, nonatomic) NSTimer *blinkTimer;
 @property (strong, nonatomic) UIView *blackBottomFrame;
+@property (strong, nonatomic) NSIndexPath *cellToDelete;
+@property BOOL blinkStatus;
+@property BOOL shouldReload;
 
 @end
 
@@ -37,7 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+    
     [self configureImageViewBorder:10.0];
     [self loadPhotosFromDisk];
     [self addLongPressGestureForDeleting];
@@ -46,6 +48,23 @@
                                              selector:@selector(reloadData:)
                                                  name:@"PhotoAdded"
                                                object:nil];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    
+    if (self.usersThumbnails.count > 0) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Share" style: UIBarButtonItemStyleBordered target:self action:@selector(sharePhotoScreen:)];
+    }
+    else
+        self.navigationItem.rightBarButtonItem = nil;
+    
+    if(self.shouldReload){
+        [self loadPhotosFromDisk];
+        [self.thumbnailView reloadData];
+        self.shouldReload = NO;
+    }
 }
 
 
@@ -57,8 +76,7 @@
 
 -(void)reloadData:(NSNotification*)notif
 {
-    [self loadPhotosFromDisk];
-    [self.thumbnailView reloadData];
+    self.shouldReload = YES;
 }
 
 -(void)configureImageViewBorder:(CGFloat)borderWidth
@@ -94,7 +112,7 @@
         self.usersPhotos = [@{@0: [UIImage imageWithData:dataTemp[0]]} mutableCopy];
         self.largeImage.image = self.usersPhotos[@0];
         
-        [self.blinkTimer invalidate];
+        [self hideNoSavedPhotosView];
     }
 }
 
@@ -102,7 +120,6 @@
 {
     UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc]
                                           initWithTarget:self action:@selector(handleLongPress:)];
-    lpgr.minimumPressDuration = 2.0; //seconds
     lpgr.delegate = self;
     [self.thumbnailView addGestureRecognizer:lpgr];
 }
@@ -114,8 +131,9 @@
     NSIndexPath *indexPath = [self.thumbnailView indexPathForItemAtPoint:p];
     if (indexPath == nil)
         NSLog(@"long press on collection view but not on a row");
-    else{
+    else if (gestureRecognizer.state == UIGestureRecognizerStateEnded){
         NSLog(@"long press on collection view at row %d", indexPath.row);
+        self.cellToDelete = indexPath;
         [self deletePhoto];
     }
 }
@@ -124,10 +142,16 @@
 {
     self.largeImage.image = [UIImage imageNamed:@"noSavedImages"];
     [self buildAttributedStrings];
-    
+    self.attributedStringLabel.hidden = NO;
     self.blinkTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval)1.0 target:self selector:@selector(blink:) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer: self.blinkTimer forMode:NSRunLoopCommonModes];
     self.blinkStatus = YES;
+}
+
+-(void)hideNoSavedPhotosView
+{
+    self.attributedStringLabel.hidden = YES;
+    [self.blinkTimer invalidate];
 }
 
 -(void)blink:(NSTimer*)timer
@@ -165,6 +189,71 @@
 -(void)deletePhoto
 {
     //TODO:
+    UIAlertView *tmp = [[UIAlertView alloc]
+                        initWithTitle:@"Are you sure you want to delete this photo?"
+                        message:nil
+                        delegate:self
+                        cancelButtonTitle:@"No"
+                        otherButtonTitles:@"Yes", nil];
+    [tmp show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1){
+        //update data store
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSMutableArray* photoData = [[defaults arrayForKey:kSavedPhotos] mutableCopy];
+        [photoData removeObjectAtIndex:self.cellToDelete.row];
+        [defaults setObject:photoData forKey:kSavedPhotos];
+        
+        //update collection view data
+        [self.usersPhotos removeObjectForKey:@(self.cellToDelete.row)];
+        NSMutableArray *mutableThumbnails =  [self.usersThumbnails mutableCopy];
+        [mutableThumbnails removeObjectAtIndex:self.cellToDelete.row];
+        self.usersThumbnails = [NSArray arrayWithArray:mutableThumbnails];
+        
+        [self.thumbnailView deleteItemsAtIndexPaths:@[self.cellToDelete]];
+        
+        if ([self.usersThumbnails count]==0) {
+            [self showNoSavedPhotosView];
+        }
+        else{
+
+            if(self.usersPhotos[@0]){
+                self.largeImage.image = self.usersPhotos[@0];
+            }
+            else{
+                self.usersPhotos[@0] = [UIImage imageWithData: self.largeImageData[0]];
+                self.largeImage.image = self.usersPhotos[@0];
+            }
+            
+        }
+        
+        //[self.thumbnailView reloadData];
+    }
+}
+
+-(void)sharePhotoScreen:(id)sender
+{
+    if( [self.thumbnailView indexPathsForSelectedItems].count != 0){
+        
+        UIActivityViewController* activityViewController =
+        [[UIActivityViewController alloc] initWithActivityItems:@[@"My new artpiece, made using Dephace™",self.largeImage.image]
+                                          applicationActivities:nil];
+        [activityViewController setExcludedActivityTypes:@[UIActivityTypeMessage]];
+        
+        [self presentViewController:activityViewController animated:YES completion:^{}];
+    }
+    else{
+        UIAlertView *tmp = [[UIAlertView alloc]
+                           initWithTitle:@"No Photo Selected!"
+                           message:@"Select a photo below to share."
+                           delegate:self
+                           cancelButtonTitle:@"OK"
+                            otherButtonTitles:nil];
+        [tmp show];
+    }
 }
 
 #pragma mark - UICollectionView Datasource
@@ -172,7 +261,6 @@
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
     
     return [self.usersThumbnails count];
-    
 }
 
 - (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
@@ -188,7 +276,8 @@
         cell.layer.borderColor = [[UIColor magentaColor] CGColor]; // highlight selection
     }
     else
-        cell.layer.borderWidth = 0.0f; // Default
+        cell.layer.borderWidth = 3.0f;
+        cell.layer.borderColor = [[UIColor whiteColor] CGColor]; // Default
     
     cell.previewImage.image = self.usersThumbnails[indexPath.row];
     return cell;
@@ -209,14 +298,13 @@
         self.usersPhotos[@(indexPath.row)] = [UIImage imageWithData: self.largeImageData[indexPath.row]];
         self.largeImage.image = self.usersPhotos[@(indexPath.row)];
     }
-    
-    
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PPFilterPreviewCell *cell = (PPFilterPreviewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-    cell.layer.borderWidth = 0.0;
+    cell.layer.borderWidth = 3.0f;
+    cell.layer.borderColor = [[UIColor whiteColor] CGColor];
 }
 
 

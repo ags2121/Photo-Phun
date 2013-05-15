@@ -281,7 +281,8 @@ static CGFloat kFilterPreviewSize = 70.0;
         cell.layer.borderColor = [[UIColor magentaColor] CGColor]; // highlight selection
     }
     else
-        cell.layer.borderWidth = 0.0f; // Default
+        cell.layer.borderWidth = 3.0f;
+        cell.layer.borderColor = [[UIColor whiteColor] CGColor]; // Default
     
     NSString *filterName = self.filterPreviewsInfo[indexPath.row];
     cell.filterName.text = filterName;
@@ -316,7 +317,8 @@ static CGFloat kFilterPreviewSize = 70.0;
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PPFilterPreviewCell *cell = (PPFilterPreviewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-    cell.layer.borderWidth = 0.0;    
+    cell.layer.borderWidth = 3.0f;
+    cell.layer.borderColor = [[UIColor whiteColor] CGColor]; // Default
 }
 
 #pragma mark - Filter Methods
