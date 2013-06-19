@@ -18,16 +18,16 @@ Implements the following features:
 Screenshots:
 <p>
 <img src="https://dl.dropboxusercontent.com/u/12514699/2013-06-18%2022.31.09.png" width="300"> 
-<br>
+<p>
 <img src="https://dl.dropboxusercontent.com/u/12514699/2013-06-18%2022.31.23.png" width="300"> 
-<br>
+<p>
 <img src="https://dl.dropboxusercontent.com/u/12514699/2013-06-18%2022.34.05.png" width="300"> 
-<br>
+<p>
 <img src="https://dl.dropboxusercontent.com/u/12514699/2013-06-18%2022.35.50.png" width="300"> 
-<br>
+<p>
 <img src="https://dl.dropboxusercontent.com/u/12514699/2013-06-18%2022.36.09.png" width="300"> 
-<br>
+<p>
 <img src="https://dl.dropboxusercontent.com/u/12514699/2013-06-18%2023.22.08.png" width="300"> 
-<br>
+<p>
 <img src="https://dl.dropboxusercontent.com/u/12514699/2013-06-18%2023.24.05.png" width="300"> 
-<br>
+<p>
